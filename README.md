@@ -1,16 +1,48 @@
-# led_control_app
+# 📖📖 LED Controller APP 
 
-A new Flutter project.
+A Flutter app to control light street. 
 
-## Getting Started
+## 💻 Requirements
 
-This project is a starting point for a Flutter application.
+- Any Operating System (ie. MacOS X, Linux, Windows)
+- Any IDE with Flutter SDK installed (ie. IntelliJ, Android Studio, VSCode etc)
+- A little knowledge of Dart and Flutter
 
-A few resources to get you started if this is your first Flutter project:
+## ✨ Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- [x] Display infomation of light street (temp, humi,...).
+- [x] Remote brightness control.
+- [x] Add new led.
+- [x] Set schedule.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📸 ScreenShots
+
+
+| Light                             | Dark                              |
+| --------------------------------- | --------------------------------- |
+| <img src="ss/1.png" width="300">  | <img src="ss/2.png" width="300">  |
+| <img src="ss/3.png" width="300">  | <img src="ss/4.png" width="300">  |
+| <img src="ss/5.png" width="300">  | <img src="ss/6.png" width="300">  |
+| <img src="ss/7.png" width="300">  | <img src="ss/8.png" width="300">  |
+
+## 🔌 Plugins
+
+| Name                                                                   | Usage                                         |
+| ---------------------------------------------------------------------- | --------------------------------------------- |
+| [**Provider**]              | State Management                              |
+| [**MongoDB**]                        | NoSQL database |
+| [**Node.js**]                      | Create server                           |
+| [**Http**]                          | Network calls and File Download               |
+
+## Setup
+
+```bash
+git clone https://github.com/dinkmsd/express_server.git
+
+cd led_control_mobile
+
+flutter pub get
+
+flutter run
+```
+
