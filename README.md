@@ -39,7 +39,7 @@ A Flutter app to control light street.
 ```bash
 git clone https://github.com/dinkmsd/express_server.git
 
-cd led_control_mobile
+cd led_control_app
 
 flutter pub get
 
