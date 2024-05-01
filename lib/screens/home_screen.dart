@@ -29,8 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
     webSocketManager = WebSocketManager(serverUrl: "ws://10.0.2.2:80");
     webSocketManager.connect();
     webSocketManager.onMessage("update", (body) {
-      var response = json.decode(body);
-      dataService.updateData(context: context, data: response);
+      print("Update: $body");
+      dataService.updateData(context: context, data: body['data']);
     });
     super.initState();
   }
@@ -155,8 +155,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                           dataService.addNewLed(
                                               context,
                                               nameTextController.text,
-                                              latTextController.text,
-                                              lonTextController.text);
+                                              double.parse(
+                                                  latTextController.text),
+                                              double.parse(
+                                                  lonTextController.text));
+                                          Navigator.of(context).pop();
                                         },
                                         label: const Text(
                                           "Add",

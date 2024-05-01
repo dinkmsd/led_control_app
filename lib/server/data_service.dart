@@ -11,7 +11,7 @@ class DataService {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);
     final token = dataProvider.token;
     http.Response res = await http.get(
-      Uri.parse('http://10.0.2.2:8080/data'),
+      Uri.parse('http://10.0.2.2:8080/led/data'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token'
@@ -33,26 +33,46 @@ class DataService {
   }
 
   void addNewLed(
-      BuildContext context, String name, String lat, String lon) async {
+      BuildContext context, String name, double lat, double lon) async {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);
     final token = dataProvider.token;
-    http.Response res = await http.post(Uri.parse('http://10.0.2.2:8080/data'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token'
-        },
-        body: jsonEncode({
-          "name": name,
-          "lat": lat,
-          "lon": lon,
-        }));
+    http.Response res =
+        await http.post(Uri.parse('http://10.0.2.2:8080/led/data'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token'
+            },
+            body: jsonEncode({
+              "name": name,
+              "lat": lat,
+              "lon": lon,
+            }));
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
-      var data = body['data'];
-      LedInfo item = LedInfo.fromJson(data);
+      LedInfo item = LedInfo.fromJson(body);
       dataProvider.addLed(item);
     } else {
       dataProvider.loadFailed();
+    }
+  }
+
+  void modifyLumi(BuildContext context, String ledId, int value) async {
+    var dataProvider = Provider.of<DataProvider>(context, listen: false);
+    final token = dataProvider.token;
+    http.Response res =
+        await http.patch(Uri.parse('http://10.0.2.2:8080/led/brightness'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token'
+            },
+            body: jsonEncode({"ledId": ledId, "value": value}));
+    if (res.statusCode == 200) {
+      // var body = json.decode(res.body);
+      // print(body);
+      // LedInfo item = LedInfo.fromJson(body);
+      // dataProvider.addLed(item);
+    } else {
+      // dataProvider.loadFailed();
     }
   }
 }

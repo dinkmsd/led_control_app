@@ -4,6 +4,7 @@ import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/providers/schedule_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
 import 'package:led_control_app/screens/schedule_screen.dart';
+import 'package:led_control_app/server/data_service.dart';
 import 'package:led_control_app/utils/app_color.dart';
 import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   late UserProvider userProvider;
+  DataService dataService = DataService();
 
   @override
   void initState() {
@@ -142,7 +144,10 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 Center(
                   child: SliderWidget(
-                    onChange: (value) {},
+                    onChange: (value) {
+                      dataService.modifyLumi(
+                          context, widget.ledID, value.toInt());
+                    },
                     onChangeEnd: (value) {
                       // Push request
                     },
