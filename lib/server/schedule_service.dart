@@ -88,22 +88,24 @@ class ScheduleService {
 
     var ledID = scheduleProvider.id;
     final msg = jsonEncode({
-      'ledID': ledID,
-      'scheID': scheID,
-      'status': status.toString(),
+      'ledId': ledID,
+      'scheduleId': scheID,
+      'status': status,
     });
     http.Response res =
-        await http.put(Uri.parse('http://10.0.2.2:8080/led/schedule'),
+        await http.patch(Uri.parse('http://10.0.2.2:8080/led/schedule'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'
             },
             body: msg);
-
     if (res.statusCode == 200) {
-      List<dynamic> body = json.decode(res.body);
-      List<Schedule> schedules = body.map((e) => Schedule.fromJson(e)).toList();
-      scheduleProvider.loadSuccessed(schedules);
+      var body = json.decode(res.body);
+      print(body);
+      var schedule = scheduleProvider.schedules
+          .firstWhere((element) => element.id == scheID);
+      schedule.status = body['status'];
+      scheduleProvider.loadSuccessed(scheduleProvider.schedules);
     }
   }
 
