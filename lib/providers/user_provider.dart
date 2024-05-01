@@ -13,7 +13,6 @@ class UserProvider extends ChangeNotifier {
     name: '',
     username: '',
     token: '',
-    password: '',
     role: -1,
   );
 
@@ -43,8 +42,7 @@ class UserProvider extends ChangeNotifier {
       name: user['name'] ?? '',
       username: user['username'] ?? '',
       token: user['token'] ?? '',
-      password: '',
-      role: user['role'] ?? 0,
+      role: user['role'] ?? -1,
     );
   }
 

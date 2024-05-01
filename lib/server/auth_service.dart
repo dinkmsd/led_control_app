@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:led_control_app/models/user_model.dart';
 import 'package:led_control_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,13 +14,11 @@ class AuthService {
     required String password,
   }) async {
     try {
-      User user = User(
-          id: '',
-          name: name,
-          username: username,
-          password: password,
-          token: '',
-          role: 0);
+      dynamic user = {
+        name: name,
+        username: username,
+        password: password,
+      };
       http.Response res = await http.post(
         Uri.parse('http://10.0.2.2:8080/auth/register'),
         body: user.toJson(),
@@ -65,18 +62,18 @@ class AuthService {
       var body = json.decode(res.body);
       if (res.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        userProvider.setUser(res.body);
+        userProvider.setUser(body['user']);
         String token = body['token'];
         await prefs.setString('token', token);
-        userProvider.setUser(jsonEncode(body));
         userProvider.setHome(token);
-        print('Token: $token');
       } else {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(body['msg'])));
+            .showSnackBar(SnackBar(content: Text(body['message'])));
       }
     } catch (e) {
+      debugPrint("AuthService: $e");
+
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -105,8 +102,9 @@ class AuthService {
       );
 
       // print('Token response: ${tokenRes.statusCode}');
-      if (tokenRes.statusCode == 201) {
+      if (tokenRes.statusCode == 200) {
         var userData = json.decode(tokenRes.body);
+        debugPrint('$userData');
         userProvider.setUser(userData);
         userProvider.setHome(token!);
         return;
