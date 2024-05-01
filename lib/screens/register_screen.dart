@@ -10,7 +10,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final AuthService authService = AuthService();
@@ -18,7 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void registerUser() {
     authService.registerUser(
       context: context,
-      email: emailController.text,
+      username: usernameController.text,
       password: passwordController.text,
       name: nameController.text,
     );
@@ -46,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomTextField(
-              controller: emailController,
+              controller: usernameController,
               hintText: 'Enter your username',
             ),
           ),

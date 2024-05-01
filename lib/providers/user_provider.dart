@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:led_control_app/models/user_model.dart';
 
@@ -8,14 +6,15 @@ enum AppAuthState { wating, login, register, loged }
 class UserProvider extends ChangeNotifier {
   String _token = '';
 
-  AppAuthState state = AppAuthState.wating;
+  AppAuthState state = AppAuthState.loged;
 
   User _user = User(
     id: '',
+    name: '',
     username: '',
-    email: '',
     token: '',
     password: '',
+    role: -1,
   );
 
   String get token => _token;
@@ -38,16 +37,15 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setUser(String body) {
-    var data = json.decode(body)['data'];
+  void setUser(dynamic user) {
     _user = User(
-      id: data['id'] ?? '',
-      username: data['username'] ?? '',
-      email: data['email'] ?? '',
-      token: data['token'] ?? '',
+      id: user['id'] ?? '',
+      name: user['name'] ?? '',
+      username: user['username'] ?? '',
+      token: user['token'] ?? '',
       password: '',
+      role: user['role'] ?? 0,
     );
-    // notifyListeners();
   }
 
   void setUserFromModel(User user) {

@@ -10,21 +10,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthService {
   void registerUser({
     required BuildContext context,
-    required String email,
-    required String password,
     required String name,
+    required String username,
+    required String password,
   }) async {
     try {
       User user = User(
-        id: '',
-        username: name,
-        password: password,
-        email: email,
-        token: '',
-      );
-
+          id: '',
+          name: name,
+          username: username,
+          password: password,
+          token: '',
+          role: 0);
       http.Response res = await http.post(
-        Uri.parse('http://10.0.2.2:8080/register'),
+        Uri.parse('http://10.0.2.2:8080/auth/register'),
         body: user.toJson(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -35,10 +34,10 @@ class AuthService {
       if (res.statusCode == 200) {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(body['msg'])));
+            .showSnackBar(SnackBar(content: Text(body['message'])));
       } else if (res.statusCode == 201) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(body['msg'])));
+            .showSnackBar(SnackBar(content: Text(body['message'])));
       }
     } catch (e) {
       ScaffoldMessenger.of(context)
@@ -54,7 +53,7 @@ class AuthService {
     try {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
       http.Response res = await http.post(
-        Uri.parse('http://10.0.2.2:8080/login'),
+        Uri.parse('http://10.0.2.2:8080/auth/login'),
         body: jsonEncode({
           'username': username,
           'password': password,
@@ -67,11 +66,11 @@ class AuthService {
       if (res.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         userProvider.setUser(res.body);
-        String token = body['data']['token'];
-        await prefs.setString('x-auth-token', token);
-        print(body['data']);
-        userProvider.setUser(body['data']);
+        String token = body['token'];
+        await prefs.setString('token', token);
+        userProvider.setUser(jsonEncode(body));
         userProvider.setHome(token);
+        print('Token: $token');
       } else {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
@@ -91,29 +90,32 @@ class AuthService {
     try {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+      var token = prefs.getString('token');
       if (token == null) {
-        prefs.setString('x-auth-token', '');
+        prefs.setString('token', '');
       }
-
+      // token =
+      //     "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzA5ZjIxOWY1ODg1ZmMxMDZhOGRhMiIsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE3MTQ0Njg3NDF9.kbMJhrOOFEsdBD9FB4aDzwOZU0QwqGyEFk8I98i6Rhgyxl8ndGbYpMXrlNlPF8-izEvVb5cykGsKl8jPQHBI3gqZuuh64YyWACKNBGoi4ecMaZ0lhhBfiFxqbpffXB5E_MEIFfRBmWqX5iret_6nzxIVtvyxG9IApQxgEYmpTQnoBkGrzqkHmYB4BBebqrNYP-fGlKzWAuBeT6EcY88_xSuxek5zVWkvS0gQRSizLxer6mTE18ZT2Xo6iSRz70YuybdYVV7YA3u5HwtkaZFYTFqRNYLwNpI8Nb-xpJMxaDtET7mY_5VEWyQe4bXE8WxuzBn6zJKKtKesN5sM3OdWGw";
       var tokenRes = await http.post(
-        Uri.parse('http://10.0.2.2:8080/token'),
+        Uri.parse('http://10.0.2.2:8080/auth/token'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'token': token!,
+          'Authorization': 'Bearer $token',
         },
       );
 
-      if (tokenRes.statusCode == 200) {
-        userProvider.setUser(tokenRes.body);
-        userProvider.setHome(token);
+      // print('Token response: ${tokenRes.statusCode}');
+      if (tokenRes.statusCode == 201) {
+        var userData = json.decode(tokenRes.body);
+        userProvider.setUser(userData);
+        userProvider.setHome(token!);
         return;
-        // userProvider.setUser(body['data']);
-      } else if (tokenRes.statusCode == 201) {
-        prefs.setString('x-auth-token', '');
+      } else {
+        prefs.setString('token', '');
       }
       userProvider.setLogin();
     } catch (e) {
+      debugPrint('Error: $e');
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
     }

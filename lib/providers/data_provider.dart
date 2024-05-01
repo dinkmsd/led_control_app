@@ -38,6 +38,11 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addLed(LedInfo item) {
+    _items.add(item);
+    notifyListeners();
+  }
+
   void loadFailed() {
     state = LoadingState.fail;
     notifyListeners();

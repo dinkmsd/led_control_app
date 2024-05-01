@@ -89,8 +89,12 @@ class LedInfo {
     return LedInfo(
         id: jsonData['_id'] as String,
         name: jsonData['name'] as String,
-        lat: jsonData['lat'] as double,
-        lon: jsonData['lon'] as double,
+        lat: jsonData['lat'] is double
+            ? jsonData['lat'] as double
+            : (jsonData['lat'] as int).toDouble(),
+        lon: jsonData['lon'] is double
+            ? jsonData['lon'] as double
+            : (jsonData['lon'] as int).toDouble(),
         status: jsonData['status'] as bool,
         temp: jsonData['temp'] != null ? jsonData['temp'] as int : null,
         humi: jsonData['humi'] != null ? jsonData['humi'] as int : null,

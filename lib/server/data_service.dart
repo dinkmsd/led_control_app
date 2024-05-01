@@ -36,20 +36,21 @@ class DataService {
       BuildContext context, String name, String lat, String lon) async {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);
     final token = dataProvider.token;
-    http.Response res = await http
-        .post(Uri.parse('http://10.0.2.2:8080/data'), headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $token'
-    }, body: {
-      "name": name,
-      "lat": lat,
-      "lon": lon,
-    });
+    http.Response res = await http.post(Uri.parse('http://10.0.2.2:8080/data'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          "name": name,
+          "lat": lat,
+          "lon": lon,
+        }));
     if (res.statusCode == 200) {
-      List<dynamic> data = json.decode(res.body);
-      List<LedInfo> allData = [];
-      allData = data.map((json) => LedInfo.fromJson(json)).toList();
-      dataProvider.loadSuccessed(allData);
+      var body = json.decode(res.body);
+      var data = body['data'];
+      LedInfo item = LedInfo.fromJson(data);
+      dataProvider.addLed(item);
     } else {
       dataProvider.loadFailed();
     }

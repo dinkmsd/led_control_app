@@ -44,7 +44,6 @@ class WebSocketManager {
   void disconnect() {
     print("Disconnected!!!");
     _channel!.sink.close();
-    
   }
 
   void sendMessage(Map<String, dynamic> message) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:led_control_app/components/slider_widget.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/providers/schedule_provider.dart';
+import 'package:led_control_app/providers/user_provider.dart';
 import 'package:led_control_app/screens/schedule_screen.dart';
 import 'package:led_control_app/utils/app_color.dart';
 import 'package:led_control_app/utils/patten.dart';
@@ -16,6 +17,15 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  late UserProvider userProvider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(builder: (context, state, child) {

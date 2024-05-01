@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:led_control_app/models/led_model.dart';
+import 'package:led_control_app/providers/user_provider.dart';
 import 'package:led_control_app/server/schedule_service.dart';
 import 'package:led_control_app/utils/app_color.dart';
 import 'package:led_control_app/utils/custom_switch.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleWidget extends StatefulWidget {
   final Schedule item;
@@ -14,6 +16,14 @@ class ScheduleWidget extends StatefulWidget {
 }
 
 class _ScheduleWidgetState extends State<ScheduleWidget> {
+  late UserProvider userProvider;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+  }
+
   ScheduleService scheduleService = ScheduleService();
   @override
   Widget build(BuildContext context) {
@@ -47,16 +57,17 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                   ],
                 ),
               ),
-              CustomSwitch(
-                value: widget.item.status,
-                onChanged: (value) {
-                  scheduleService.updateSchedule(
-                      context, widget.item.id, value);
-                  setState(() {
-                    widget.item.status = value;
-                  });
-                },
-              ),
+              if (userProvider.user.role > 0)
+                CustomSwitch(
+                  value: widget.item.status,
+                  onChanged: (value) {
+                    scheduleService.updateSchedule(
+                        context, widget.item.id, value);
+                    setState(() {
+                      widget.item.status = value;
+                    });
+                  },
+                ),
             ],
           ),
           Text("Brightness: ${widget.item.value} %",
