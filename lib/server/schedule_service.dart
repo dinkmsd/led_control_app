@@ -13,15 +13,14 @@ class ScheduleService {
     final token = scheduleProvider.token;
     var id = scheduleProvider.id;
     http.Response res = await http.get(
-      Uri.parse('http://10.0.2.2:8080/schedule'),
+      Uri.parse('http://10.0.2.2:8080/led/schedule/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
-        'id': id,
       },
     );
     if (res.statusCode == 200) {
-      List<dynamic> body = json.decode(res.body);
+      List<dynamic> body = json.decode(res.body)['data'];
       List<Schedule> schedules = body.map((e) => Schedule.fromJson(e)).toList();
       scheduleProvider.loadSuccessed(schedules);
     }
@@ -35,20 +34,21 @@ class ScheduleService {
     var id = scheduleProvider.id;
 
     var msg = jsonEncode({
-      'ledID': id,
+      'ledId': id,
       'time': scheduleProvider.timeString,
-      'value': value,
-      'status': true.toString()
+      'value': int.parse(value),
     });
+
     http.Response res =
-        await http.post(Uri.parse('http://10.0.2.2:8080/schedule'),
+        await http.post(Uri.parse('http://10.0.2.2:8080/led/schedule'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'
             },
             body: msg);
     if (res.statusCode == 200) {
-      List<dynamic> body = json.decode(res.body);
+      print(res.body);
+      List<dynamic> body = json.decode(res.body)['data'];
       List<Schedule> schedules = body.map((e) => Schedule.fromJson(e)).toList();
       scheduleProvider.loadSuccessed(schedules);
     }
@@ -62,12 +62,12 @@ class ScheduleService {
     var ledID = scheduleProvider.id;
 
     var msg = jsonEncode({
-      'ledID': ledID,
-      'scheID': scheID,
+      'ledId': ledID,
+      'scheduleId': scheID,
     });
 
     http.Response res =
-        await http.delete(Uri.parse('http://10.0.2.2:8080/schedule'),
+        await http.delete(Uri.parse('http://10.0.2.2:8080/led/schedule'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'
@@ -75,7 +75,7 @@ class ScheduleService {
             body: msg);
 
     if (res.statusCode == 200) {
-      List<dynamic> body = json.decode(res.body);
+      List<dynamic> body = json.decode(res.body)['data'];
       List<Schedule> schedules = body.map((e) => Schedule.fromJson(e)).toList();
       scheduleProvider.loadSuccessed(schedules);
     }
@@ -93,7 +93,7 @@ class ScheduleService {
       'status': status.toString(),
     });
     http.Response res =
-        await http.put(Uri.parse('http://10.0.2.2:8080/schedule'),
+        await http.put(Uri.parse('http://10.0.2.2:8080/led/schedule'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'

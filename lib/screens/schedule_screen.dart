@@ -65,7 +65,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
                                           child: const Text('Cancel')),
                                       IconButton(
                                           onPressed: () {},

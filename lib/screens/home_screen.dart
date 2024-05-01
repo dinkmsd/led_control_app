@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:led_control_app/components/led_info_item_widget.dart';
 import 'package:led_control_app/controllers/web_socket_manager.dart';
-// import 'package:led_control_app/controllers/web_socket_controller.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
 import 'package:led_control_app/server/data_service.dart';
@@ -29,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
     webSocketManager = WebSocketManager(serverUrl: "ws://10.0.2.2:80");
     webSocketManager.connect();
     webSocketManager.onMessage("update", (body) {
-      print("Update: $body");
       dataService.updateData(context: context, data: body['data']);
     });
     super.initState();
