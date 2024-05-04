@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:led_control_app/app_color.dart';
-import 'package:led_control_app/detail_screen.dart';
-import 'package:led_control_app/modules.dart';
-import 'package:led_control_app/utlis.dart';
+import 'package:led_control_app/providers/data_provider.dart';
+import 'package:led_control_app/screens/home_screen.dart';
+import 'package:led_control_app/utils/app_color.dart';
+import 'package:led_control_app/utils/patten.dart';
+import 'package:provider/provider.dart';
 
-class LedInfoItemWidget extends StatelessWidget {
-  final LightInfo item;
-  const LedInfoItemWidget({super.key, required this.item});
+class GroupLedWidget extends StatelessWidget {
+  final String groupName;
+  final int ledNums;
+  final int ledActive;
+  final int ledError;
+  const GroupLedWidget(
+      {super.key,
+      required this.groupName,
+      required this.ledNums,
+      required this.ledActive,
+      required this.ledError});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        var dataProvider = Provider.of<DataProvider>(context, listen: false);
+
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailScreen(
-              item: item,
-            ),
+            builder: (context) => ChangeNotifierProvider.value(
+                value: dataProvider, child: const HomeScreen()),
           ),
         );
       },
@@ -54,9 +64,9 @@ class LedInfoItemWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    item.name,
+                    groupName,
                     style: const TextStyle(
-                        color: AppColors.textCustomColor,
+                        color: Color.fromARGB(255, 14, 37, 139),
                         fontWeight: FontWeight.w500),
                   ),
                   const Icon(Icons.arrow_circle_right_outlined,
@@ -70,17 +80,12 @@ class LedInfoItemWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    detailInfoWidget("Temp", Icons.device_thermostat,
-                        item.temp != null ? '${item.temp}°C' : '-'),
+                    detailInfoWidget("Leds", Icons.lightbulb, '${ledNums}'),
                     const VerticalDivider(thickness: 1),
-                    detailInfoWidget("Humi", Icons.water_drop,
-                        item.humi != null ? '${item.humi}%' : '-'),
+                    detailInfoWidget(
+                        "Active", Icons.run_circle, '${ledActive}'),
                     const VerticalDivider(thickness: 1),
-                    detailInfoWidget("Lumi", Icons.light_mode,
-                        item.brightness != null ? '${item.brightness}%' : '-'),
-                    const VerticalDivider(thickness: 1),
-                    detailInfoWidget("Incli", Icons.text_rotation_angledown,
-                        item.incli != null ? '${item.incli}°' : '-'),
+                    detailInfoWidget("Error", Icons.error, '${ledError}'),
                   ],
                 ),
               ),

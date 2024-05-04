@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:led_control_app/models/led_model.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/screens/detail_screen.dart';
@@ -17,10 +17,40 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   LatLng? currentPosition;
-  MapController? mapController;
-  final LatLng _center = const LatLng(10.879584309969259, 106.8069217975916);
+  GoogleMapController? mapController;
+  LatLng _center = const LatLng(10.879584309969259, 106.8069217975916);
+  Set<Marker> markers = {};
+  BitmapDescriptor iconImage = BitmapDescriptor.defaultMarker;
 
-  List<Marker> markers = [];
+  void initMarkerIcon() async {
+    iconImage = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(size: Size(48, 48)),
+        'assets/images/light.png');
+    setState(() {});
+  }
+
+  getLocation() async {
+    await Geolocator.requestPermission();
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    double lat = position.latitude;
+    double long = position.longitude;
+
+    LatLng location = LatLng(lat, long);
+
+    setState(() {
+      _center = location;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getLocation();
+    initMarkerIcon();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,33 +81,33 @@ class _MapScreenState extends State<MapScreen> {
         padding: contentPadding,
         child: Consumer<DataProvider>(builder: (context, state, child) {
           var items = state.items;
-          markers = [];
+          markers = {};
           for (var item in items) {
             final position = LatLng(item.lat, item.lon);
             markers.add(Marker(
-              child: GestureDetector(
-                  onTap: () {
-                    final tmpPosition = LatLng(item.lat - 0.0002, item.lon);
-                    currentPosition = tmpPosition;
-                    mapController?.move(position, 20);
-                    showModalSheet(item);
-                  },
-                  child: Image.asset('assets/images/light.png')),
-              point: position,
+              onTap: () {
+                final tmpPosition = LatLng(item.lat - 0.0002, item.lon);
+                currentPosition = tmpPosition;
+                // mapController?.moveCamera(CameraU);
+                showModalSheet(item);
+              },
+              icon: iconImage,
+              position: position,
+              markerId: MarkerId(position.toString()),
             ));
           }
-          return FlutterMap(
-            options: MapOptions(
-              initialCenter: _center,
-              initialZoom: 15,
+          return GoogleMap(
+            trafficEnabled: true,
+            initialCameraPosition: CameraPosition(
+              target: _center,
+              zoom: 18.0,
             ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.app',
-              ),
-              MarkerLayer(markers: markers),
-            ],
+            onMapCreated: (controller) {
+              mapController = controller;
+            },
+            markers: markers,
+            myLocationButtonEnabled: true,
+            myLocationEnabled: true,
           );
         }),
       ),
