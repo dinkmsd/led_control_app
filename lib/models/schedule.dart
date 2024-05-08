@@ -6,7 +6,7 @@ part 'schedule.g.dart';
 class Schedule with _$Schedule {
   factory Schedule({
     required String id,
-    required DateTime time,
+    required String time,
     required int value,
     required bool status,
   }) = _Schedule;

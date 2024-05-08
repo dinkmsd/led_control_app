@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:led_control_app/models/group.dart';
 import 'package:led_control_app/providers/data_provider.dart';
-import 'package:led_control_app/screens/home_screen.dart';
+import 'package:led_control_app/providers/group_detail_provider.dart';
+import 'package:led_control_app/screens/group_detail_screen.dart';
 import 'package:led_control_app/utils/app_color.dart';
 import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
 class GroupLedWidget extends StatelessWidget {
-  final String groupName;
-  final int ledNums;
-  final int ledActive;
-  final int ledError;
-  const GroupLedWidget(
-      {super.key,
-      required this.groupName,
-      required this.ledNums,
-      required this.ledActive,
-      required this.ledError});
+  final Group item;
+  const GroupLedWidget({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +20,12 @@ class GroupLedWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChangeNotifierProvider.value(
-                value: dataProvider, child: const HomeScreen()),
+            builder: (context) => ChangeNotifierProvider(
+                create: (_) =>
+                    GroupDetailProvider(token: dataProvider.token, group: item),
+                child: GroupDetailScreen(
+                  groupId: item.id,
+                )),
           ),
         );
       },
@@ -64,7 +62,7 @@ class GroupLedWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    groupName,
+                    item.groupName,
                     style: const TextStyle(
                         color: Color.fromARGB(255, 14, 37, 139),
                         fontWeight: FontWeight.w500),
@@ -80,12 +78,13 @@ class GroupLedWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    detailInfoWidget("Leds", Icons.lightbulb, '${ledNums}'),
+                    detailInfoWidget(
+                        "Leds", Icons.lightbulb, '${item.numLeds}'),
                     const VerticalDivider(thickness: 1),
                     detailInfoWidget(
-                        "Active", Icons.run_circle, '${ledActive}'),
+                        "Active", Icons.run_circle, '${item.ledActive}'),
                     const VerticalDivider(thickness: 1),
-                    detailInfoWidget("Error", Icons.error, '${ledError}'),
+                    detailInfoWidget("Error", Icons.error, '${item.ledError}'),
                   ],
                 ),
               ),

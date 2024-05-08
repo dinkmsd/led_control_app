@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/components/led_info_item_widget.dart';
-import 'package:led_control_app/controllers/web_socket_manager.dart';
 import 'package:led_control_app/providers/data_provider.dart';
+import 'package:led_control_app/providers/group_detail_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
-import 'package:led_control_app/server/data_service.dart';
+import 'package:led_control_app/server/group_detail_service.dart';
 import 'package:led_control_app/utils/custom_textfield.dart';
 import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class GroupDetailScreen extends StatefulWidget {
+  final String groupId;
+  const GroupDetailScreen({super.key, required this.groupId});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<GroupDetailScreen> createState() => _GroupDetailScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final DataService dataService = DataService();
+class _GroupDetailScreenState extends State<GroupDetailScreen> {
+  final GroupDetailService groupDetailService = GroupDetailService();
   late UserProvider userProvider;
-  late WebSocketManager webSocketManager;
+
   @override
   void initState() {
     userProvider = Provider.of<UserProvider>(context, listen: false);
-    dataService.getData(context: context);
-    webSocketManager = WebSocketManager(serverUrl: "ws://10.0.2.2:80");
-    webSocketManager.connect();
-    webSocketManager.onMessage("update", (body) {
-      dataService.updateData(context: context, data: body['data']);
-    });
+    groupDetailService.getDetailGroup(context);
     super.initState();
   }
 
@@ -148,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: ElevatedButton.icon(
                                         onPressed: () {
                                           // Add led handler
-                                          dataService.addNewLed(
+                                          groupDetailService.addNewLed(
                                               context,
                                               nameTextController.text,
                                               double.parse(
@@ -187,13 +183,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Padding(
           padding: contentPadding,
-          child: Consumer<DataProvider>(builder: (context, state, child) {
+          child:
+              Consumer<GroupDetailProvider>(builder: (context, state, child) {
             if (state.state == LoadingState.wating) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            var items = state.items;
+            var items = state.group.leds;
             if (items.isEmpty) {
               return const Center(
                 child: Text(

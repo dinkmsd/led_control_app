@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:led_control_app/models/group.dart';
 import 'package:led_control_app/utils/patten.dart';
 
-class AppProvider extends ChangeNotifier {
+class GroupProvider extends ChangeNotifier {
   final String token;
-  AppProvider({required this.token});
+  GroupProvider({required this.token});
   List<Group> _items = [];
   LoadingState state = LoadingState.wating;
   List<Group> get items => _items;

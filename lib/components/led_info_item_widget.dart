@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:led_control_app/models/led_model.dart';
-import 'package:led_control_app/providers/data_provider.dart';
+import 'package:led_control_app/models/led.dart';
+import 'package:led_control_app/providers/group_detail_provider.dart';
+import 'package:led_control_app/providers/led_detail_provider.dart';
 import 'package:led_control_app/screens/detail_screen.dart';
 import 'package:led_control_app/utils/app_color.dart';
 import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
 class LedInfoItemWidget extends StatelessWidget {
-  final LedInfo item;
+  final Led item;
   const LedInfoItemWidget({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        var dataProvider = Provider.of<DataProvider>(context, listen: false);
-
+        var groupDetailProvider =
+            Provider.of<GroupDetailProvider>(context, listen: false);
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChangeNotifierProvider.value(
-                value: dataProvider,
+            builder: (context) => ChangeNotifierProvider(
+                create: (_) => LedDetailProvider(
+                    token: groupDetailProvider.token, led: item),
                 child: DetailScreen(
                   ledID: item.id,
                 )),
@@ -51,8 +53,10 @@ class LedInfoItemWidget extends StatelessWidget {
           children: [
             Container(
               padding: contentPadding,
-              decoration: const BoxDecoration(
-                  color: Color(0xFFFCD64D),
+              decoration: BoxDecoration(
+                  color: item.status
+                      ? Color.fromARGB(255, 112, 252, 77)
+                      : Color.fromARGB(255, 252, 77, 77),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(5),
                       topRight: Radius.circular(5))),
@@ -61,12 +65,16 @@ class LedInfoItemWidget extends StatelessWidget {
                 children: [
                   Text(
                     item.name,
-                    style: const TextStyle(
-                        color: AppColors.textCustomColor,
+                    style: TextStyle(
+                        color: item.status
+                            ? AppColors.textCustomColor
+                            : Color.fromARGB(255, 248, 211, 118),
                         fontWeight: FontWeight.w500),
                   ),
-                  const Icon(Icons.arrow_circle_right_outlined,
-                      color: AppColors.textCustomColor)
+                  Icon(Icons.arrow_circle_right_outlined,
+                      color: item.status
+                          ? AppColors.textCustomColor
+                          : Color.fromARGB(255, 248, 211, 118))
                 ],
               ),
             ),

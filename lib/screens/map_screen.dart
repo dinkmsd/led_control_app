@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:led_control_app/models/led_model.dart';
+import 'package:led_control_app/models/led.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/screens/detail_screen.dart';
 import 'package:led_control_app/utils/app_color.dart';
@@ -80,7 +80,7 @@ class _MapScreenState extends State<MapScreen> {
         margin: contentPadding,
         padding: contentPadding,
         child: Consumer<DataProvider>(builder: (context, state, child) {
-          var items = state.items;
+          var items = state.groups[0].leds;
           markers = {};
           for (var item in items) {
             final position = LatLng(item.lat, item.lon);
@@ -114,7 +114,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  void showModalSheet(LedInfo item) {
+  void showModalSheet(Led item) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(15))),

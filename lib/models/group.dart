@@ -6,6 +6,10 @@ part 'group.g.dart';
 @freezed
 class Group with _$Group {
   factory Group({
+    required String id,
+    required int numLeds,
+    required int ledActive,
+    required int ledError,
     required String groupName,
     required bool status,
     @Default([]) List<Led> leds,

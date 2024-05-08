@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:led_control_app/models/led_model.dart';
-
-enum LoadingState { wating, success, fail }
+import 'package:led_control_app/models/schedule.dart';
+import 'package:led_control_app/utils/patten.dart';
 
 class ScheduleProvider extends ChangeNotifier {
   String id;

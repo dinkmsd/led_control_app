@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:led_control_app/components/led_info_item_widget.dart';
-import 'package:led_control_app/controllers/web_socket_manager.dart';
+import 'package:led_control_app/components/group_led_widget.dart';
 import 'package:led_control_app/providers/data_provider.dart';
+import 'package:led_control_app/providers/group_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
-import 'package:led_control_app/server/data_service.dart';
+import 'package:led_control_app/server/group_service.dart';
 import 'package:led_control_app/utils/custom_textfield.dart';
 import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class GroupScreen extends StatefulWidget {
+  const GroupScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<GroupScreen> createState() => _GroupScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final DataService dataService = DataService();
+class _GroupScreenState extends State<GroupScreen> {
   late UserProvider userProvider;
-  late WebSocketManager webSocketManager;
+  GroupService groupService = GroupService();
+
   @override
   void initState() {
+    groupService.getListGroup(context: context);
     userProvider = Provider.of<UserProvider>(context, listen: false);
-    dataService.getData(context: context);
-    webSocketManager = WebSocketManager(serverUrl: "ws://10.0.2.2:80");
-    webSocketManager.connect();
-    webSocketManager.onMessage("update", (body) {
-      dataService.updateData(context: context, data: body['data']);
-    });
     super.initState();
   }
 
@@ -35,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Ly Thuong Kiet'),
+          title: Text('Group'),
           actions: [
             if (userProvider.user.role > 0)
               IconButton(
@@ -148,13 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: ElevatedButton.icon(
                                         onPressed: () {
                                           // Add led handler
-                                          dataService.addNewLed(
-                                              context,
-                                              nameTextController.text,
-                                              double.parse(
-                                                  latTextController.text),
-                                              double.parse(
-                                                  lonTextController.text));
+
                                           Navigator.of(context).pop();
                                         },
                                         label: const Text(
@@ -187,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Padding(
           padding: contentPadding,
-          child: Consumer<DataProvider>(builder: (context, state, child) {
+          child: Consumer<GroupProvider>(builder: (context, state, child) {
             if (state.state == LoadingState.wating) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -208,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 10,
                     ),
                 itemBuilder: (context, index) {
-                  return LedInfoItemWidget(item: items[index]);
+                  return GroupLedWidget(item: items[index]);
                 });
           }),
         ));

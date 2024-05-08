@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:led_control_app/models/led_model.dart';
+import 'package:led_control_app/models/schedule.dart';
 import 'package:led_control_app/providers/schedule_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -101,10 +101,9 @@ class ScheduleService {
             body: msg);
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
-      print(body);
       var schedule = scheduleProvider.schedules
           .firstWhere((element) => element.id == scheID);
-      schedule.status = body['status'];
+      schedule = schedule.copyWith(status: body['status']);
       scheduleProvider.loadSuccessed(scheduleProvider.schedules);
     }
   }

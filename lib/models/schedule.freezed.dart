@@ -21,7 +21,7 @@ Schedule _$ScheduleFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Schedule {
   String get id => throw _privateConstructorUsedError;
-  DateTime get time => throw _privateConstructorUsedError;
+  String get time => throw _privateConstructorUsedError;
   int get value => throw _privateConstructorUsedError;
   bool get status => throw _privateConstructorUsedError;
 
@@ -36,7 +36,7 @@ abstract class $ScheduleCopyWith<$Res> {
   factory $ScheduleCopyWith(Schedule value, $Res Function(Schedule) then) =
       _$ScheduleCopyWithImpl<$Res, Schedule>;
   @useResult
-  $Res call({String id, DateTime time, int value, bool status});
+  $Res call({String id, String time, int value, bool status});
 }
 
 /// @nodoc
@@ -65,7 +65,7 @@ class _$ScheduleCopyWithImpl<$Res, $Val extends Schedule>
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -86,7 +86,7 @@ abstract class _$$ScheduleImplCopyWith<$Res>
       __$$ScheduleImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, DateTime time, int value, bool status});
+  $Res call({String id, String time, int value, bool status});
 }
 
 /// @nodoc
@@ -113,7 +113,7 @@ class __$$ScheduleImplCopyWithImpl<$Res>
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -141,7 +141,7 @@ class _$ScheduleImpl implements _Schedule {
   @override
   final String id;
   @override
-  final DateTime time;
+  final String time;
   @override
   final int value;
   @override
@@ -184,7 +184,7 @@ class _$ScheduleImpl implements _Schedule {
 abstract class _Schedule implements Schedule {
   factory _Schedule(
       {required final String id,
-      required final DateTime time,
+      required final String time,
       required final int value,
       required final bool status}) = _$ScheduleImpl;
 
@@ -194,7 +194,7 @@ abstract class _Schedule implements Schedule {
   @override
   String get id;
   @override
-  DateTime get time;
+  String get time;
   @override
   int get value;
   @override
