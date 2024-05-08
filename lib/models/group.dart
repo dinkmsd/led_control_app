@@ -3,7 +3,7 @@ import 'package:led_control_app/models/led.dart';
 part 'group.freezed.dart';
 part 'group.g.dart';
 
-@freezed
+@Freezed(makeCollectionsUnmodifiable: false)
 class Group with _$Group {
   factory Group({
     required String id,

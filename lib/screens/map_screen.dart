@@ -193,7 +193,7 @@ class _MapScreenState extends State<MapScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetailScreen(
-                            ledID: item.id,
+                            led: item,
                           ),
                         ),
                       );

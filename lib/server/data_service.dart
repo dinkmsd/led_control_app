@@ -18,9 +18,9 @@ class DataService {
         'Authorization': 'Bearer $token'
       },
     );
+    print(res.body);
     if (res.statusCode == 200) {
       List<dynamic> data = json.decode(res.body);
-      print(res.body);
       List<Group> allData = [];
       allData = data.map((json) => Group.fromJson(json)).toList();
       dataProvider.loadSuccessed(allData);

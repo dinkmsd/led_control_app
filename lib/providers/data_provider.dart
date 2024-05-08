@@ -13,6 +13,7 @@ class DataProvider extends ChangeNotifier {
   List<Group> get groups => _groups;
 
   void updateData(dynamic data) {
+    print(data);
     var groupIndex =
         _groups.indexWhere((element) => element.id == data['groupId']);
     var ledIndex = _groups[groupIndex]

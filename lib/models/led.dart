@@ -4,7 +4,7 @@ import 'package:led_control_app/models/schedule.dart';
 part 'led.freezed.dart';
 part 'led.g.dart';
 
-@freezed
+@Freezed(makeCollectionsUnmodifiable: false)
 class Led with _$Led {
   factory Led({
     required String id,

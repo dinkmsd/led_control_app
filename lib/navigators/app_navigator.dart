@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:led_control_app/controllers/web_socket_manager.dart';
 import 'package:led_control_app/providers/data_provider.dart';
-import 'package:led_control_app/providers/group_provider.dart';
 import 'package:led_control_app/screens/group_screen.dart';
 import 'package:led_control_app/screens/map_screen.dart';
 import 'package:led_control_app/screens/notification_screen.dart';
@@ -34,7 +34,7 @@ class NavigationExample extends StatefulWidget {
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
   final DataService dataService = DataService();
-  // late WebSocketManager webSocketManager;
+  late WebSocketManager webSocketManager;
   late String token;
   late DataProvider dataProvider;
 
@@ -42,13 +42,12 @@ class _NavigationExampleState extends State<NavigationExample> {
   void initState() {
     super.initState();
     dataProvider = Provider.of<DataProvider>(context, listen: false);
-    token = dataProvider.token;
     dataService.getData(context: context);
-    // webSocketManager = WebSocketManager(serverUrl: "ws://10.0.2.2:80");
-    // webSocketManager.connect();
-    // webSocketManager.onMessage("update", (body) {
-    //   dataService.updateData(context: context, data: body['data']);
-    // });
+    webSocketManager = WebSocketManager(serverUrl: "ws://10.0.2.2:80");
+    webSocketManager.connect();
+    webSocketManager.onMessage("update", (body) {
+      dataService.updateData(context: context, data: body['data']);
+    });
   }
 
   @override
@@ -88,9 +87,11 @@ class _NavigationExampleState extends State<NavigationExample> {
       ),
       body: <Widget>[
         /// Home page
-        ChangeNotifierProvider(
-          create: (_) => GroupProvider(token: token),
-          child: GroupScreen(),
+        ChangeNotifierProvider.value(
+          value: dataProvider,
+          child: GroupScreen(
+            groups: dataProvider.groups,
+          ),
         ),
         // const NotificationScreen(),
 

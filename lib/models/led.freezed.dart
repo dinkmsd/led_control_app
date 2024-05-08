@@ -273,11 +273,11 @@ class __$$LedImplCopyWithImpl<$Res> extends _$LedCopyWithImpl<$Res, _$LedImpl>
           : cellID // ignore: cast_nullable_to_non_nullable
               as int?,
       histories: null == histories
-          ? _value._histories
+          ? _value.histories
           : histories // ignore: cast_nullable_to_non_nullable
               as List<History>,
       schedules: null == schedules
-          ? _value._schedules
+          ? _value.schedules
           : schedules // ignore: cast_nullable_to_non_nullable
               as List<Schedule>,
     ));
@@ -302,10 +302,8 @@ class _$LedImpl implements _Led {
       this.z,
       this.rsrp,
       this.cellID,
-      final List<History> histories = const [],
-      final List<Schedule> schedules = const []})
-      : _histories = histories,
-        _schedules = schedules;
+      this.histories = const [],
+      this.schedules = const []});
 
   factory _$LedImpl.fromJson(Map<String, dynamic> json) =>
       _$$LedImplFromJson(json);
@@ -338,23 +336,12 @@ class _$LedImpl implements _Led {
   final int? rsrp;
   @override
   final int? cellID;
-  final List<History> _histories;
   @override
   @JsonKey()
-  List<History> get histories {
-    if (_histories is EqualUnmodifiableListView) return _histories;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_histories);
-  }
-
-  final List<Schedule> _schedules;
+  final List<History> histories;
   @override
   @JsonKey()
-  List<Schedule> get schedules {
-    if (_schedules is EqualUnmodifiableListView) return _schedules;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_schedules);
-  }
+  final List<Schedule> schedules;
 
   @override
   String toString() {
@@ -381,10 +368,8 @@ class _$LedImpl implements _Led {
             (identical(other.z, z) || other.z == z) &&
             (identical(other.rsrp, rsrp) || other.rsrp == rsrp) &&
             (identical(other.cellID, cellID) || other.cellID == cellID) &&
-            const DeepCollectionEquality()
-                .equals(other._histories, _histories) &&
-            const DeepCollectionEquality()
-                .equals(other._schedules, _schedules));
+            const DeepCollectionEquality().equals(other.histories, histories) &&
+            const DeepCollectionEquality().equals(other.schedules, schedules));
   }
 
   @JsonKey(ignore: true)
@@ -405,8 +390,8 @@ class _$LedImpl implements _Led {
       z,
       rsrp,
       cellID,
-      const DeepCollectionEquality().hash(_histories),
-      const DeepCollectionEquality().hash(_schedules));
+      const DeepCollectionEquality().hash(histories),
+      const DeepCollectionEquality().hash(schedules));
 
   @JsonKey(ignore: true)
   @override

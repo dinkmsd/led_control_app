@@ -1,47 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/components/slider_widget.dart';
-import 'package:led_control_app/controllers/web_socket_manager.dart';
-import 'package:led_control_app/providers/led_detail_provider.dart';
+import 'package:led_control_app/models/led.dart';
+import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/providers/schedule_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
 import 'package:led_control_app/screens/schedule_screen.dart';
-import 'package:led_control_app/server/led_detail_service.dart';
+import 'package:led_control_app/server/data_service.dart';
 import 'package:led_control_app/utils/app_color.dart';
 import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class DetailScreen extends StatefulWidget {
-  final String ledID;
-  const DetailScreen({super.key, required this.ledID});
+  final Led led;
+  const DetailScreen({super.key, required this.led});
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
 class _DetailScreenState extends State<DetailScreen> {
   late UserProvider userProvider;
-  LedDetailService ledDetailService = LedDetailService();
-  late LedDetailProvider ledDetailProvider;
-  late WebSocketManager webSocketManager;
+  final DataService dataService = DataService();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    webSocketManager = WebSocketManager(serverUrl: "ws://10.0.2.2:80");
-    webSocketManager.connect();
-    webSocketManager.onMessage("update", (body) {
-      ledDetailService.updateData(context: context, data: body['data']);
-    });
-    ledDetailProvider = Provider.of<LedDetailProvider>(context, listen: false);
+
     userProvider = Provider.of<UserProvider>(context, listen: false);
-    ledDetailService.getDetailLed(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LedDetailProvider>(builder: (context, state, child) {
-      var item = state.led;
+    return Consumer<DataProvider>(builder: (context, state, child) {
+      var item = widget.led;
       return Scaffold(
         appBar: AppBar(
           title: Text(item.name),
@@ -154,8 +146,8 @@ class _DetailScreenState extends State<DetailScreen> {
                 Center(
                   child: SliderWidget(
                     onChange: (value) {
-                      ledDetailService.modifyLumi(
-                          context, widget.ledID, value.toInt());
+                      dataService.modifyLumi(
+                          context, widget.led.id, value.toInt());
                     },
                     onChangeEnd: (value) {
                       // Push request

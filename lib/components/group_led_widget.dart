@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/models/group.dart';
 import 'package:led_control_app/providers/data_provider.dart';
-import 'package:led_control_app/providers/group_detail_provider.dart';
 import 'package:led_control_app/screens/group_detail_screen.dart';
 import 'package:led_control_app/utils/app_color.dart';
 import 'package:led_control_app/utils/patten.dart';
@@ -20,11 +19,10 @@ class GroupLedWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChangeNotifierProvider(
-                create: (_) =>
-                    GroupDetailProvider(token: dataProvider.token, group: item),
+            builder: (context) => ChangeNotifierProvider.value(
+                value: dataProvider,
                 child: GroupDetailScreen(
-                  groupId: item.id,
+                  group: item,
                 )),
           ),
         );

@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/components/led_info_item_widget.dart';
+import 'package:led_control_app/models/group.dart';
 import 'package:led_control_app/providers/data_provider.dart';
-import 'package:led_control_app/providers/group_detail_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
-import 'package:led_control_app/server/group_detail_service.dart';
+import 'package:led_control_app/server/data_service.dart';
 import 'package:led_control_app/utils/custom_textfield.dart';
 import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
 class GroupDetailScreen extends StatefulWidget {
-  final String groupId;
-  const GroupDetailScreen({super.key, required this.groupId});
+  final Group group;
+  const GroupDetailScreen({super.key, required this.group});
 
   @override
   State<GroupDetailScreen> createState() => _GroupDetailScreenState();
 }
 
 class _GroupDetailScreenState extends State<GroupDetailScreen> {
-  final GroupDetailService groupDetailService = GroupDetailService();
   late UserProvider userProvider;
+  final DataService dataService = DataService();
 
   @override
   void initState() {
     userProvider = Provider.of<UserProvider>(context, listen: false);
-    groupDetailService.getDetailGroup(context);
     super.initState();
   }
 
@@ -144,7 +143,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                                       child: ElevatedButton.icon(
                                         onPressed: () {
                                           // Add led handler
-                                          groupDetailService.addNewLed(
+                                          dataService.addNewLed(
                                               context,
                                               nameTextController.text,
                                               double.parse(
@@ -183,14 +182,13 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
         ),
         body: Padding(
           padding: contentPadding,
-          child:
-              Consumer<GroupDetailProvider>(builder: (context, state, child) {
+          child: Consumer<DataProvider>(builder: (context, state, child) {
             if (state.state == LoadingState.wating) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            var items = state.group.leds;
+            var items = widget.group.leds;
             if (items.isEmpty) {
               return const Center(
                 child: Text(

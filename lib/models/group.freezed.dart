@@ -164,7 +164,7 @@ class __$$GroupImplCopyWithImpl<$Res>
           : status // ignore: cast_nullable_to_non_nullable
               as bool,
       leds: null == leds
-          ? _value._leds
+          ? _value.leds
           : leds // ignore: cast_nullable_to_non_nullable
               as List<Led>,
     ));
@@ -181,8 +181,7 @@ class _$GroupImpl implements _Group {
       required this.ledError,
       required this.groupName,
       required this.status,
-      final List<Led> leds = const []})
-      : _leds = leds;
+      this.leds = const []});
 
   factory _$GroupImpl.fromJson(Map<String, dynamic> json) =>
       _$$GroupImplFromJson(json);
@@ -199,14 +198,9 @@ class _$GroupImpl implements _Group {
   final String groupName;
   @override
   final bool status;
-  final List<Led> _leds;
   @override
   @JsonKey()
-  List<Led> get leds {
-    if (_leds is EqualUnmodifiableListView) return _leds;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_leds);
-  }
+  final List<Led> leds;
 
   @override
   String toString() {
@@ -227,13 +221,13 @@ class _$GroupImpl implements _Group {
             (identical(other.groupName, groupName) ||
                 other.groupName == groupName) &&
             (identical(other.status, status) || other.status == status) &&
-            const DeepCollectionEquality().equals(other._leds, _leds));
+            const DeepCollectionEquality().equals(other.leds, leds));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, numLeds, ledActive, ledError,
-      groupName, status, const DeepCollectionEquality().hash(_leds));
+      groupName, status, const DeepCollectionEquality().hash(leds));
 
   @JsonKey(ignore: true)
   @override

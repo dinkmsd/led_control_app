@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/components/group_led_widget.dart';
+import 'package:led_control_app/models/group.dart';
 import 'package:led_control_app/providers/data_provider.dart';
-import 'package:led_control_app/providers/group_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
-import 'package:led_control_app/server/group_service.dart';
 import 'package:led_control_app/utils/custom_textfield.dart';
 import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
 class GroupScreen extends StatefulWidget {
-  const GroupScreen({super.key});
+  final List<Group> groups;
+  const GroupScreen({super.key, required this.groups});
 
   @override
   State<GroupScreen> createState() => _GroupScreenState();
@@ -17,11 +17,11 @@ class GroupScreen extends StatefulWidget {
 
 class _GroupScreenState extends State<GroupScreen> {
   late UserProvider userProvider;
-  GroupService groupService = GroupService();
+  // GroupService groupService = GroupService();
 
   @override
   void initState() {
-    groupService.getListGroup(context: context);
+    // groupService.getListGroup(context: context);
     userProvider = Provider.of<UserProvider>(context, listen: false);
     super.initState();
   }
@@ -176,13 +176,18 @@ class _GroupScreenState extends State<GroupScreen> {
         ),
         body: Padding(
           padding: contentPadding,
-          child: Consumer<GroupProvider>(builder: (context, state, child) {
+          child: Consumer<DataProvider>(builder: (context, state, child) {
             if (state.state == LoadingState.wating) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            var items = state.items;
+            if (state.state == LoadingState.fail) {
+              return const Center(
+                child: Text("Failed to loading data"),
+              );
+            }
+            var items = widget.groups;
             if (items.isEmpty) {
               return const Center(
                 child: Text(

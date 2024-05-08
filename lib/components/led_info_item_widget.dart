@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/models/led.dart';
-import 'package:led_control_app/providers/group_detail_provider.dart';
-import 'package:led_control_app/providers/led_detail_provider.dart';
+import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/screens/detail_screen.dart';
 import 'package:led_control_app/utils/app_color.dart';
 import 'package:led_control_app/utils/patten.dart';
@@ -15,16 +14,14 @@ class LedInfoItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        var groupDetailProvider =
-            Provider.of<GroupDetailProvider>(context, listen: false);
+        var dataProvider = Provider.of<DataProvider>(context, listen: false);
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChangeNotifierProvider(
-                create: (_) => LedDetailProvider(
-                    token: groupDetailProvider.token, led: item),
+            builder: (context) => ChangeNotifierProvider.value(
+                value: dataProvider,
                 child: DetailScreen(
-                  ledID: item.id,
+                  led: item,
                 )),
           ),
         );

@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'history.freezed.dart';
 part 'history.g.dart';
 
-@freezed
+@Freezed(makeCollectionsUnmodifiable: false)
 class History with _$History {
   factory History({
     required int temp,
