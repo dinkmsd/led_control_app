@@ -15,10 +15,10 @@ class DataProvider extends ChangeNotifier {
   void updateData(dynamic data) {
     print(data);
     var groupIndex =
-        _groups.indexWhere((element) => element.id == data['groupId']);
+        _groups.indexWhere((element) => element.id == data['group']);
     var ledIndex = _groups[groupIndex]
         .leds
-        .indexWhere((element) => element.id == data['ledId']);
+        .indexWhere((element) => element.id == data['id']);
 
     _groups[groupIndex].leds[ledIndex] =
         _groups[groupIndex].leds[ledIndex].copyWith(
@@ -33,6 +33,7 @@ class DataProvider extends ChangeNotifier {
   void loadSuccessed(List<Group> groups) {
     _groups = groups;
     state = LoadingState.success;
+    print("Success");
     notifyListeners();
   }
 

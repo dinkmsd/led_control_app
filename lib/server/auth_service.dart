@@ -20,7 +20,7 @@ class AuthService {
         password: password,
       };
       http.Response res = await http.post(
-        Uri.parse('http://10.0.2.2:8080/auth/register'),
+        Uri.parse('http://104.214.180.72/auth/register'),
         body: user.toJson(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -50,7 +50,7 @@ class AuthService {
     try {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
       http.Response res = await http.post(
-        Uri.parse('http://10.0.2.2:8080/auth/login'),
+        Uri.parse('http://104.214.180.72/auth/login'),
         body: jsonEncode({
           'username': username,
           'password': password,
@@ -94,7 +94,7 @@ class AuthService {
       // token =
       //     "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzA5ZjIxOWY1ODg1ZmMxMDZhOGRhMiIsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE3MTQ0Njg3NDF9.kbMJhrOOFEsdBD9FB4aDzwOZU0QwqGyEFk8I98i6Rhgyxl8ndGbYpMXrlNlPF8-izEvVb5cykGsKl8jPQHBI3gqZuuh64YyWACKNBGoi4ecMaZ0lhhBfiFxqbpffXB5E_MEIFfRBmWqX5iret_6nzxIVtvyxG9IApQxgEYmpTQnoBkGrzqkHmYB4BBebqrNYP-fGlKzWAuBeT6EcY88_xSuxek5zVWkvS0gQRSizLxer6mTE18ZT2Xo6iSRz70YuybdYVV7YA3u5HwtkaZFYTFqRNYLwNpI8Nb-xpJMxaDtET7mY_5VEWyQe4bXE8WxuzBn6zJKKtKesN5sM3OdWGw";
       var tokenRes = await http.post(
-        Uri.parse('http://10.0.2.2:8080/auth/token'),
+        Uri.parse('http://104.214.180.72/auth/token'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token',

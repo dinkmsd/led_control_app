@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/components/led_info_item_widget.dart';
-import 'package:led_control_app/models/group.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
 import 'package:led_control_app/server/data_service.dart';
@@ -9,8 +8,8 @@ import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
 class GroupDetailScreen extends StatefulWidget {
-  final Group group;
-  const GroupDetailScreen({super.key, required this.group});
+  final int groupIdx;
+  const GroupDetailScreen({super.key, required this.groupIdx});
 
   @override
   State<GroupDetailScreen> createState() => _GroupDetailScreenState();
@@ -188,7 +187,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            var items = widget.group.leds;
+            var items = state.groups[widget.groupIdx].leds;
             if (items.isEmpty) {
               return const Center(
                 child: Text(
@@ -203,7 +202,8 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                       height: 10,
                     ),
                 itemBuilder: (context, index) {
-                  return LedInfoItemWidget(item: items[index]);
+                  return LedInfoItemWidget(
+                      groupIdx: widget.groupIdx, ledIdx: index);
                 });
           }),
         ));

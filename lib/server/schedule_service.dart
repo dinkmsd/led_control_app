@@ -13,7 +13,7 @@ class ScheduleService {
     final token = scheduleProvider.token;
     var id = scheduleProvider.id;
     http.Response res = await http.get(
-      Uri.parse('http://10.0.2.2:8080/led/schedule/$id'),
+      Uri.parse('http://104.214.180.72/led/schedule/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -40,7 +40,7 @@ class ScheduleService {
     });
 
     http.Response res =
-        await http.post(Uri.parse('http://10.0.2.2:8080/led/schedule'),
+        await http.post(Uri.parse('http://104.214.180.72/led/schedule'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'
@@ -67,7 +67,7 @@ class ScheduleService {
     });
 
     http.Response res =
-        await http.delete(Uri.parse('http://10.0.2.2:8080/led/schedule'),
+        await http.delete(Uri.parse('http://104.214.180.72/led/schedule'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'
@@ -93,7 +93,7 @@ class ScheduleService {
       'status': status,
     });
     http.Response res =
-        await http.patch(Uri.parse('http://10.0.2.2:8080/led/schedule'),
+        await http.patch(Uri.parse('http://104.214.180.72/led/schedule'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'

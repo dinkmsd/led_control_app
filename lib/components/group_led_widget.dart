@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:led_control_app/models/group.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/screens/group_detail_screen.dart';
 import 'package:led_control_app/utils/app_color.dart';
@@ -7,11 +6,12 @@ import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
 class GroupLedWidget extends StatelessWidget {
-  final Group item;
-  const GroupLedWidget({super.key, required this.item});
+  final int groupIdx;
+  const GroupLedWidget({super.key, required this.groupIdx});
 
   @override
   Widget build(BuildContext context) {
+    final dataProvider = Provider.of<DataProvider>(context, listen: false);
     return GestureDetector(
       onTap: () {
         var dataProvider = Provider.of<DataProvider>(context, listen: false);
@@ -22,7 +22,7 @@ class GroupLedWidget extends StatelessWidget {
             builder: (context) => ChangeNotifierProvider.value(
                 value: dataProvider,
                 child: GroupDetailScreen(
-                  group: item,
+                  groupIdx: groupIdx,
                 )),
           ),
         );
@@ -60,7 +60,7 @@ class GroupLedWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    item.groupName,
+                    dataProvider.groups[groupIdx].groupName,
                     style: const TextStyle(
                         color: Color.fromARGB(255, 14, 37, 139),
                         fontWeight: FontWeight.w500),
@@ -76,13 +76,14 @@ class GroupLedWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    detailInfoWidget(
-                        "Leds", Icons.lightbulb, '${item.numLeds}'),
+                    detailInfoWidget("Leds", Icons.lightbulb,
+                        '${dataProvider.groups[groupIdx].numLeds}'),
                     const VerticalDivider(thickness: 1),
-                    detailInfoWidget(
-                        "Active", Icons.run_circle, '${item.ledActive}'),
+                    detailInfoWidget("Active", Icons.run_circle,
+                        '${dataProvider.groups[groupIdx].ledActive}'),
                     const VerticalDivider(thickness: 1),
-                    detailInfoWidget("Error", Icons.error, '${item.ledError}'),
+                    detailInfoWidget("Error", Icons.error,
+                        '${dataProvider.groups[groupIdx].ledError}'),
                   ],
                 ),
               ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:led_control_app/models/led.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/screens/detail_screen.dart';
 import 'package:led_control_app/utils/app_color.dart';
@@ -7,21 +6,25 @@ import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
 class LedInfoItemWidget extends StatelessWidget {
-  final Led item;
-  const LedInfoItemWidget({super.key, required this.item});
+  final int groupIdx;
+  final int ledIdx;
+  const LedInfoItemWidget(
+      {super.key, required this.groupIdx, required this.ledIdx});
 
   @override
   Widget build(BuildContext context) {
+    final dataProvider = Provider.of<DataProvider>(context, listen: false);
+
     return GestureDetector(
       onTap: () {
-        var dataProvider = Provider.of<DataProvider>(context, listen: false);
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider.value(
                 value: dataProvider,
                 child: DetailScreen(
-                  led: item,
+                  groupIdx: groupIdx,
+                  ledIdx: ledIdx,
                 )),
           ),
         );
@@ -51,7 +54,7 @@ class LedInfoItemWidget extends StatelessWidget {
             Container(
               padding: contentPadding,
               decoration: BoxDecoration(
-                  color: item.status
+                  color: dataProvider.groups[groupIdx].leds[ledIdx].status
                       ? Color.fromARGB(255, 112, 252, 77)
                       : Color.fromARGB(255, 252, 77, 77),
                   borderRadius: BorderRadius.only(
@@ -61,15 +64,15 @@ class LedInfoItemWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    item.name,
+                    dataProvider.groups[groupIdx].leds[ledIdx].name,
                     style: TextStyle(
-                        color: item.status
+                        color: dataProvider.groups[groupIdx].leds[ledIdx].status
                             ? AppColors.textCustomColor
                             : Color.fromARGB(255, 248, 211, 118),
                         fontWeight: FontWeight.w500),
                   ),
                   Icon(Icons.arrow_circle_right_outlined,
-                      color: item.status
+                      color: dataProvider.groups[groupIdx].leds[ledIdx].status
                           ? AppColors.textCustomColor
                           : Color.fromARGB(255, 248, 211, 118))
                 ],
@@ -81,17 +84,34 @@ class LedInfoItemWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    detailInfoWidget("Temp", Icons.device_thermostat,
-                        item.temp != null ? '${item.temp}°C' : '-'),
+                    detailInfoWidget(
+                        "Temp",
+                        Icons.device_thermostat,
+                        dataProvider.groups[groupIdx].leds[ledIdx].temp != null
+                            ? '${dataProvider.groups[groupIdx].leds[ledIdx].temp}°C'
+                            : '-'),
                     const VerticalDivider(thickness: 1),
-                    detailInfoWidget("Humi", Icons.water_drop,
-                        item.humi != null ? '${item.humi}%' : '-'),
+                    detailInfoWidget(
+                        "Humi",
+                        Icons.water_drop,
+                        dataProvider.groups[groupIdx].leds[ledIdx].humi != null
+                            ? '${dataProvider.groups[groupIdx].leds[ledIdx].humi}%'
+                            : '-'),
                     const VerticalDivider(thickness: 1),
-                    detailInfoWidget("Lumi", Icons.light_mode,
-                        item.brightness != null ? '${item.brightness}%' : '-'),
+                    detailInfoWidget(
+                        "Lumi",
+                        Icons.light_mode,
+                        dataProvider.groups[groupIdx].leds[ledIdx].brightness !=
+                                null
+                            ? '${dataProvider.groups[groupIdx].leds[ledIdx].brightness}%'
+                            : '-'),
                     const VerticalDivider(thickness: 1),
-                    detailInfoWidget("Incli", Icons.text_rotation_angledown,
-                        item.incli != null ? '${item.incli}°' : '-'),
+                    detailInfoWidget(
+                        "Incli",
+                        Icons.text_rotation_angledown,
+                        dataProvider.groups[groupIdx].leds[ledIdx].incli != null
+                            ? '${dataProvider.groups[groupIdx].leds[ledIdx].incli}°'
+                            : '-'),
                   ],
                 ),
               ),

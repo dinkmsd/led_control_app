@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:led_control_app/models/group.dart';
-import 'package:led_control_app/models/led.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -12,13 +11,12 @@ class DataService {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);
     final token = dataProvider.token;
     http.Response res = await http.get(
-      Uri.parse('http://10.0.2.2:8080/group/list-group'),
+      Uri.parse('http://104.214.180.72/group/list-group'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token'
       },
     );
-    print(res.body);
     if (res.statusCode == 200) {
       List<dynamic> data = json.decode(res.body);
       List<Group> allData = [];
@@ -39,7 +37,7 @@ class DataService {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);
     final token = dataProvider.token;
     http.Response res =
-        await http.post(Uri.parse('http://10.0.2.2:8080/led/data'),
+        await http.post(Uri.parse('http://104.214.180.72/led/data'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'
@@ -50,8 +48,8 @@ class DataService {
               "lon": lon,
             }));
     if (res.statusCode == 200) {
-      var body = json.decode(res.body);
-      Led item = Led.fromJson(body);
+      // var body = json.decode(res.body);
+      // Led item = Led.fromJson(body);
       // dataProvider.addLed(item);
     } else {
       dataProvider.loadFailed();
@@ -62,7 +60,7 @@ class DataService {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);
     final token = dataProvider.token;
     http.Response res =
-        await http.patch(Uri.parse('http://10.0.2.2:8080/led/brightness'),
+        await http.patch(Uri.parse('http://104.214.180.72/led/brightness'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'

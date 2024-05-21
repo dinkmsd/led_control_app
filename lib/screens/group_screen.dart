@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/components/group_led_widget.dart';
-import 'package:led_control_app/models/group.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
 import 'package:led_control_app/utils/custom_textfield.dart';
@@ -8,8 +7,7 @@ import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
 class GroupScreen extends StatefulWidget {
-  final List<Group> groups;
-  const GroupScreen({super.key, required this.groups});
+  const GroupScreen({super.key});
 
   @override
   State<GroupScreen> createState() => _GroupScreenState();
@@ -17,11 +15,9 @@ class GroupScreen extends StatefulWidget {
 
 class _GroupScreenState extends State<GroupScreen> {
   late UserProvider userProvider;
-  // GroupService groupService = GroupService();
 
   @override
   void initState() {
-    // groupService.getListGroup(context: context);
     userProvider = Provider.of<UserProvider>(context, listen: false);
     super.initState();
   }
@@ -187,7 +183,7 @@ class _GroupScreenState extends State<GroupScreen> {
                 child: Text("Failed to loading data"),
               );
             }
-            var items = widget.groups;
+            var items = state.groups;
             if (items.isEmpty) {
               return const Center(
                 child: Text(
@@ -202,7 +198,7 @@ class _GroupScreenState extends State<GroupScreen> {
                       height: 10,
                     ),
                 itemBuilder: (context, index) {
-                  return GroupLedWidget(item: items[index]);
+                  return GroupLedWidget(groupIdx: index);
                 });
           }),
         ));

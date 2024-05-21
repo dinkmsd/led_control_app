@@ -89,9 +89,7 @@ class _NavigationExampleState extends State<NavigationExample> {
         /// Home page
         ChangeNotifierProvider.value(
           value: dataProvider,
-          child: GroupScreen(
-            groups: dataProvider.groups,
-          ),
+          child: GroupScreen(),
         ),
         // const NotificationScreen(),
 

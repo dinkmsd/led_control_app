@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/components/slider_widget.dart';
-import 'package:led_control_app/models/led.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/providers/schedule_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
+import 'package:led_control_app/screens/notification_screen.dart';
 import 'package:led_control_app/screens/schedule_screen.dart';
 import 'package:led_control_app/server/data_service.dart';
 import 'package:led_control_app/utils/app_color.dart';
@@ -12,8 +12,9 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class DetailScreen extends StatefulWidget {
-  final Led led;
-  const DetailScreen({super.key, required this.led});
+  final int groupIdx;
+  final int ledIdx;
+  const DetailScreen({super.key, required this.groupIdx, required this.ledIdx});
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
@@ -33,7 +34,10 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(builder: (context, state, child) {
-      var item = widget.led;
+      var item = state.groups[widget.groupIdx].leds[widget.ledIdx];
+      print("object");
+      print(item.toString());
+
       return Scaffold(
         appBar: AppBar(
           title: Text(item.name),
@@ -145,15 +149,27 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 Center(
                   child: SliderWidget(
-                    onChange: (value) {
-                      dataService.modifyLumi(
-                          context, widget.led.id, value.toInt());
-                    },
+                    onChange: (value) {},
                     onChangeEnd: (value) {
                       // Push request
+                      dataService.modifyLumi(context, item.id, value.toInt());
                     },
                     initialValue: item.brightness?.toDouble() ?? 0,
                   ),
+                ),
+                Row(
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return NotificationScreen();
+                          }));
+                        },
+                        child: Text("Analysis")),
+                    ElevatedButton(
+                        onPressed: () {}, child: Text("Access token"))
+                  ],
                 ),
               ],
             )),

@@ -189,14 +189,14 @@ class _MapScreenState extends State<MapScreen> {
                   width: MediaQuery.of(context).size.width * 3 / 4,
                   child: ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailScreen(
-                            led: item,
-                          ),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => DetailScreen(
+                      //       led: item,
+                      //     ),
+                      //   ),
+                      // );
                     },
                     label: const Text(
                       "View Detail",
