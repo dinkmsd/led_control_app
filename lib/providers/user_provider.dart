@@ -6,7 +6,7 @@ enum AppAuthState { wating, login, register, loged }
 class UserProvider extends ChangeNotifier {
   String _token = '';
 
-  AppAuthState state = AppAuthState.loged;
+  AppAuthState state = AppAuthState.wating;
 
   User _user = User(
     id: '',

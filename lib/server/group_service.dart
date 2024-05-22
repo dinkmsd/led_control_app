@@ -12,7 +12,7 @@ class GroupService {
   void getListGroup({required BuildContext context, required}) async {
     var groupProvider = Provider.of<GroupProvider>(context, listen: false);
     http.Response res = await http.get(
-      Uri.parse('http://104.214.180.72/group/list-group'),
+      Uri.parse('http://10.0.2.2:8080/group/list-group'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${groupProvider.token}'

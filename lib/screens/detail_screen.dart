@@ -35,8 +35,6 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(builder: (context, state, child) {
       var item = state.groups[widget.groupIdx].leds[widget.ledIdx];
-      print("object");
-      print(item.toString());
 
       return Scaffold(
         appBar: AppBar(

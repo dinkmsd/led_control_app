@@ -82,17 +82,16 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                   ],
                 ),
               ),
-              if (userProvider.user.role > 0)
-                CustomSwitch(
-                  value: widget.item.status,
-                  onChanged: (value) {
-                    scheduleService.updateSchedule(
-                        context, widget.item.id, value);
-                    setState(() {
-                      widget.item = widget.item.copyWith(status: value);
-                    });
-                  },
-                ),
+              CustomSwitch(
+                value: widget.item.status,
+                onChanged: (value) {
+                  scheduleService.updateSchedule(
+                      context, widget.item.id, value);
+                  setState(() {
+                    widget.item = widget.item.copyWith(status: value);
+                  });
+                },
+              ),
             ],
           ),
           Text("Brightness: ${widget.item.value} %",

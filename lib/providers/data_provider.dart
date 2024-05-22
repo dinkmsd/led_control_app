@@ -42,6 +42,11 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addGroup(Group group) {
+    _groups.add(group);
+    notifyListeners();
+  }
+
   void addSchedule(Schedule item, String groupId, String ledId) {
     var groupIndex = _groups.indexWhere((element) => element.id == groupId);
     var ledIndex =

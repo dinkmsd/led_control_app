@@ -12,7 +12,7 @@ class LedDetailService {
     var ledDetailProvider =
         Provider.of<LedDetailProvider>(context, listen: false);
     http.Response res =
-        await http.post(Uri.parse('http://104.214.180.72/group/detail-group'),
+        await http.post(Uri.parse('http://10.0.2.2:8080/group/detail-group'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer ${ledDetailProvider.token}'
@@ -48,7 +48,7 @@ class LedDetailService {
         Provider.of<GroupDetailProvider>(context, listen: false);
     final token = groupDetailProvider.token;
     http.Response res =
-        await http.post(Uri.parse('http://104.214.180.72/led/data'),
+        await http.post(Uri.parse('http://10.0.2.2:8080/led/data'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'
@@ -72,7 +72,7 @@ class LedDetailService {
         Provider.of<LedDetailProvider>(context, listen: false);
     final token = ledDetailProvider.token;
     http.Response res =
-        await http.patch(Uri.parse('http://104.214.180.72/led/brightness'),
+        await http.patch(Uri.parse('http://10.0.2.2:8080/led/brightness'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'

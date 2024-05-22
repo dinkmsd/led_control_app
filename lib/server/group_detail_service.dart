@@ -12,7 +12,7 @@ class GroupDetailService {
     var groupDetailProvider =
         Provider.of<GroupDetailProvider>(context, listen: false);
     http.Response res =
-        await http.post(Uri.parse('http://104.214.180.72/group/detail-group'),
+        await http.post(Uri.parse('http://10.0.2.2:8080/group/detail-group'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer ${groupDetailProvider.token}'
@@ -47,7 +47,7 @@ class GroupDetailService {
         Provider.of<GroupDetailProvider>(context, listen: false);
     final token = groupDetailProvider.token;
     http.Response res =
-        await http.post(Uri.parse('http://104.214.180.72/led/data'),
+        await http.post(Uri.parse('http://10.0.2.2:8080/led/data'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token'
