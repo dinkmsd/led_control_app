@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:led_control_app/components/slider_widget.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/providers/schedule_provider.dart';
@@ -156,6 +157,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
                         onPressed: () {
@@ -166,7 +168,15 @@ class _DetailScreenState extends State<DetailScreen> {
                         },
                         child: Text("Analysis")),
                     ElevatedButton(
-                        onPressed: () {}, child: Text("Access token"))
+                        onPressed: () {
+                          Clipboard.setData(new ClipboardData(text: item.id))
+                              .then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content:
+                                    Text('Copied token to your clipboard !')));
+                          });
+                        },
+                        child: Text("Access token"))
                   ],
                 ),
               ],

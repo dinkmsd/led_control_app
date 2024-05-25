@@ -6,20 +6,20 @@ import 'package:led_control_app/providers/group_detail_provider.dart';
 import 'package:led_control_app/providers/led_detail_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:led_control_app/utils/constant.dart';
 
 class LedDetailService {
   void getDetailLed(BuildContext context) async {
     var ledDetailProvider =
         Provider.of<LedDetailProvider>(context, listen: false);
-    http.Response res =
-        await http.post(Uri.parse('http://10.0.2.2:8080/group/detail-group'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': 'Bearer ${ledDetailProvider.token}'
-            },
-            body: jsonEncode({
-              'ledId': ledDetailProvider.led.id,
-            }));
+    http.Response res = await http.post(Uri.parse('${HOST}/group/detail-group'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${ledDetailProvider.token}'
+        },
+        body: jsonEncode({
+          'ledId': ledDetailProvider.led.id,
+        }));
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       Led ledDetal = Led.fromJson(data);
@@ -47,17 +47,16 @@ class LedDetailService {
     var groupDetailProvider =
         Provider.of<GroupDetailProvider>(context, listen: false);
     final token = groupDetailProvider.token;
-    http.Response res =
-        await http.post(Uri.parse('http://10.0.2.2:8080/led/data'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': 'Bearer $token'
-            },
-            body: jsonEncode({
-              "name": name,
-              "lat": lat,
-              "lon": lon,
-            }));
+    http.Response res = await http.post(Uri.parse('${HOST}/led/data'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          "name": name,
+          "lat": lat,
+          "lon": lon,
+        }));
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       Led item = Led.fromJson(body);
@@ -71,13 +70,12 @@ class LedDetailService {
     var ledDetailProvider =
         Provider.of<LedDetailProvider>(context, listen: false);
     final token = ledDetailProvider.token;
-    http.Response res =
-        await http.patch(Uri.parse('http://10.0.2.2:8080/led/brightness'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': 'Bearer $token'
-            },
-            body: jsonEncode({"ledId": ledId, "value": value}));
+    http.Response res = await http.patch(Uri.parse('${HOST}/led/brightness'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({"ledId": ledId, "value": value}));
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       print(body);

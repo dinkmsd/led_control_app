@@ -89,7 +89,7 @@ class _GroupScreenState extends State<GroupScreen> {
                                         ),
                                       ),
                                       const SizedBox(
-                                        height: 9,
+                                        height: 18,
                                       ),
                                       Container(
                                         margin: const EdgeInsets.symmetric(
@@ -98,6 +98,9 @@ class _GroupScreenState extends State<GroupScreen> {
                                           controller: groupTextController,
                                           hintText: 'Enter led name',
                                         ),
+                                      ),
+                                      const SizedBox(
+                                        height: 36,
                                       ),
                                     ],
                                   ),
@@ -156,8 +159,18 @@ class _GroupScreenState extends State<GroupScreen> {
               );
             }
             if (state.state == LoadingState.fail) {
-              return const Center(
-                child: Text("Failed to loading data"),
+              return Center(
+                child: Column(
+                  children: [
+                    Text('Network Failed!!!'),
+                    ElevatedButton(
+                        onPressed: () {
+                          state.loading();
+                          dataService.getData(context: context);
+                        },
+                        child: Text('Reload'))
+                  ],
+                ),
               );
             }
             var items = state.groups;

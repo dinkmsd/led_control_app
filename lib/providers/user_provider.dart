@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/models/user_model.dart';
 
-enum AppAuthState { wating, login, register, loged }
+enum AppAuthState { wating, login, register, loged, failed }
 
 class UserProvider extends ChangeNotifier {
   String _token = '';
@@ -48,6 +48,16 @@ class UserProvider extends ChangeNotifier {
 
   void setUserFromModel(User user) {
     _user = user;
+    notifyListeners();
+  }
+
+  void loadFailed() {
+    state = AppAuthState.failed;
+    notifyListeners();
+  }
+
+  void loading() {
+    state = AppAuthState.wating;
     notifyListeners();
   }
 }

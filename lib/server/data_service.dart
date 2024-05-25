@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:led_control_app/models/group.dart';
 import 'package:led_control_app/models/led.dart';
 import 'package:led_control_app/providers/data_provider.dart';
+import 'package:led_control_app/utils/constant.dart';
 import 'package:provider/provider.dart';
 
 class DataService {
@@ -12,7 +13,7 @@ class DataService {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);
     final token = dataProvider.token;
     http.Response res = await http.get(
-      Uri.parse('http://10.0.2.2:8080/group/list-group'),
+      Uri.parse('${HOST}/group/list-group'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token'
@@ -33,12 +34,32 @@ class DataService {
     dataProvider.updateData(data);
   }
 
+  void updateStatus(
+      {required BuildContext context,
+      required bool status,
+      required int groupIdx}) async {
+    var dataProvider = Provider.of<DataProvider>(context, listen: false);
+    final token = dataProvider.token;
+    final groupId = dataProvider.groups[groupIdx].id;
+    http.Response res =
+        await http.post(Uri.parse('${HOST}/group/update-status'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token'
+            },
+            body: jsonEncode({"groupId": groupId, "status": status}));
+    if (res.statusCode == 200) {
+      dataProvider.updateStatus(groupIdx, status);
+    } else {
+      dataProvider.loadFailed();
+    }
+  }
+
   void addNewLed(BuildContext context, String name, double lat, double lon,
       String groupId) async {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);
     final token = dataProvider.token;
-    http.Response res = await http.post(
-        Uri.parse('http://10.0.2.2:8080/group/create-led'),
+    http.Response res = await http.post(Uri.parse('${HOST}/group/create-led'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'
@@ -57,13 +78,12 @@ class DataService {
   void modifyLumi(BuildContext context, String ledId, int value) async {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);
     final token = dataProvider.token;
-    http.Response res =
-        await http.patch(Uri.parse('http://10.0.2.2:8080/led/brightness'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': 'Bearer $token'
-            },
-            body: jsonEncode({"ledId": ledId, "value": value}));
+    http.Response res = await http.patch(Uri.parse('${HOST}/led/brightness'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({"ledId": ledId, "value": value}));
     if (res.statusCode == 200) {
       // var body = json.decode(res.body);
       // print(body);
@@ -77,13 +97,12 @@ class DataService {
   void addNewGroup(String name, BuildContext context) async {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);
     final token = dataProvider.token;
-    http.Response res =
-        await http.post(Uri.parse('http://10.0.2.2:8080/group/create'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': 'Bearer $token'
-            },
-            body: jsonEncode({"nameGroup": name}));
+    http.Response res = await http.post(Uri.parse('${HOST}/group/create'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({"nameGroup": name}));
     print(res.body);
     if (res.statusCode == 200) {
       var body = json.decode(res.body);

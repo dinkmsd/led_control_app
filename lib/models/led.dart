@@ -7,6 +7,7 @@ part 'led.g.dart';
 @Freezed(makeCollectionsUnmodifiable: false)
 class Led with _$Led {
   factory Led({
+    // required String group,
     required String id,
     required String name,
     required bool status,

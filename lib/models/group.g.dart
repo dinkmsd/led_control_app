@@ -17,6 +17,10 @@ _$GroupImpl _$$GroupImplFromJson(Map<String, dynamic> json) => _$GroupImpl(
               ?.map((e) => Led.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      schedules: (json['schedules'] as List<dynamic>?)
+              ?.map((e) => Schedule.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$GroupImplToJson(_$GroupImpl instance) =>
@@ -28,4 +32,5 @@ Map<String, dynamic> _$$GroupImplToJson(_$GroupImpl instance) =>
       'groupName': instance.groupName,
       'status': instance.status,
       'leds': instance.leds,
+      'schedules': instance.schedules,
     };

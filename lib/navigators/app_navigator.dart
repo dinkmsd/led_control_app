@@ -7,6 +7,7 @@ import 'package:led_control_app/screens/notification_screen.dart';
 import 'package:led_control_app/screens/user_screen.dart';
 import 'package:led_control_app/server/data_service.dart';
 import 'package:led_control_app/utils/app_color.dart';
+import 'package:led_control_app/utils/constant.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
@@ -43,7 +44,7 @@ class _NavigationExampleState extends State<NavigationExample> {
     super.initState();
     dataProvider = Provider.of<DataProvider>(context, listen: false);
     dataService.getData(context: context);
-    webSocketManager = WebSocketManager(serverUrl: "ws://10.0.2.2:80");
+    webSocketManager = WebSocketManager(serverUrl: SOCKET_HOST);
     webSocketManager.connect();
     webSocketManager.onMessage("update", (body) {
       dataService.updateData(context: context, data: body['data']);

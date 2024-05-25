@@ -27,6 +27,7 @@ mixin _$Group {
   String get groupName => throw _privateConstructorUsedError;
   bool get status => throw _privateConstructorUsedError;
   List<Led> get leds => throw _privateConstructorUsedError;
+  List<Schedule> get schedules => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +46,8 @@ abstract class $GroupCopyWith<$Res> {
       int ledError,
       String groupName,
       bool status,
-      List<Led> leds});
+      List<Led> leds,
+      List<Schedule> schedules});
 }
 
 /// @nodoc
@@ -68,6 +70,7 @@ class _$GroupCopyWithImpl<$Res, $Val extends Group>
     Object? groupName = null,
     Object? status = null,
     Object? leds = null,
+    Object? schedules = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -98,6 +101,10 @@ class _$GroupCopyWithImpl<$Res, $Val extends Group>
           ? _value.leds
           : leds // ignore: cast_nullable_to_non_nullable
               as List<Led>,
+      schedules: null == schedules
+          ? _value.schedules
+          : schedules // ignore: cast_nullable_to_non_nullable
+              as List<Schedule>,
     ) as $Val);
   }
 }
@@ -116,7 +123,8 @@ abstract class _$$GroupImplCopyWith<$Res> implements $GroupCopyWith<$Res> {
       int ledError,
       String groupName,
       bool status,
-      List<Led> leds});
+      List<Led> leds,
+      List<Schedule> schedules});
 }
 
 /// @nodoc
@@ -137,6 +145,7 @@ class __$$GroupImplCopyWithImpl<$Res>
     Object? groupName = null,
     Object? status = null,
     Object? leds = null,
+    Object? schedules = null,
   }) {
     return _then(_$GroupImpl(
       id: null == id
@@ -167,6 +176,10 @@ class __$$GroupImplCopyWithImpl<$Res>
           ? _value.leds
           : leds // ignore: cast_nullable_to_non_nullable
               as List<Led>,
+      schedules: null == schedules
+          ? _value.schedules
+          : schedules // ignore: cast_nullable_to_non_nullable
+              as List<Schedule>,
     ));
   }
 }
@@ -181,7 +194,8 @@ class _$GroupImpl implements _Group {
       required this.ledError,
       required this.groupName,
       required this.status,
-      this.leds = const []});
+      this.leds = const [],
+      this.schedules = const []});
 
   factory _$GroupImpl.fromJson(Map<String, dynamic> json) =>
       _$$GroupImplFromJson(json);
@@ -201,10 +215,13 @@ class _$GroupImpl implements _Group {
   @override
   @JsonKey()
   final List<Led> leds;
+  @override
+  @JsonKey()
+  final List<Schedule> schedules;
 
   @override
   String toString() {
-    return 'Group(id: $id, numLeds: $numLeds, ledActive: $ledActive, ledError: $ledError, groupName: $groupName, status: $status, leds: $leds)';
+    return 'Group(id: $id, numLeds: $numLeds, ledActive: $ledActive, ledError: $ledError, groupName: $groupName, status: $status, leds: $leds, schedules: $schedules)';
   }
 
   @override
@@ -221,13 +238,22 @@ class _$GroupImpl implements _Group {
             (identical(other.groupName, groupName) ||
                 other.groupName == groupName) &&
             (identical(other.status, status) || other.status == status) &&
-            const DeepCollectionEquality().equals(other.leds, leds));
+            const DeepCollectionEquality().equals(other.leds, leds) &&
+            const DeepCollectionEquality().equals(other.schedules, schedules));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, numLeds, ledActive, ledError,
-      groupName, status, const DeepCollectionEquality().hash(leds));
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      numLeds,
+      ledActive,
+      ledError,
+      groupName,
+      status,
+      const DeepCollectionEquality().hash(leds),
+      const DeepCollectionEquality().hash(schedules));
 
   @JsonKey(ignore: true)
   @override
@@ -251,7 +277,8 @@ abstract class _Group implements Group {
       required final int ledError,
       required final String groupName,
       required final bool status,
-      final List<Led> leds}) = _$GroupImpl;
+      final List<Led> leds,
+      final List<Schedule> schedules}) = _$GroupImpl;
 
   factory _Group.fromJson(Map<String, dynamic> json) = _$GroupImpl.fromJson;
 
@@ -269,6 +296,8 @@ abstract class _Group implements Group {
   bool get status;
   @override
   List<Led> get leds;
+  @override
+  List<Schedule> get schedules;
   @override
   @JsonKey(ignore: true)
   _$$GroupImplCopyWith<_$GroupImpl> get copyWith =>

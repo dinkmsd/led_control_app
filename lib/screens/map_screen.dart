@@ -3,7 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:led_control_app/models/led.dart';
 import 'package:led_control_app/providers/data_provider.dart';
-import 'package:led_control_app/screens/detail_screen.dart';
 import 'package:led_control_app/utils/app_color.dart';
 import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +87,6 @@ class _MapScreenState extends State<MapScreen> {
               onTap: () {
                 final tmpPosition = LatLng(item.lat - 0.0002, item.lon);
                 currentPosition = tmpPosition;
-                // mapController?.moveCamera(CameraU);
                 showModalSheet(item);
               },
               icon: iconImage,
@@ -100,7 +98,7 @@ class _MapScreenState extends State<MapScreen> {
             trafficEnabled: true,
             initialCameraPosition: CameraPosition(
               target: _center,
-              zoom: 18.0,
+              zoom: 12.0,
             ),
             onMapCreated: (controller) {
               mapController = controller;

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:led_control_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:led_control_app/utils/constant.dart';
 
 class AuthService {
   void registerUser({
@@ -20,7 +21,7 @@ class AuthService {
         password: password,
       };
       http.Response res = await http.post(
-        Uri.parse('http://10.0.2.2:8080/auth/register'),
+        Uri.parse('${HOST}/auth/register'),
         body: user.toJson(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -50,7 +51,7 @@ class AuthService {
     try {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
       http.Response res = await http.post(
-        Uri.parse('http://10.0.2.2:8080/auth/login'),
+        Uri.parse('${HOST}/auth/login'),
         body: jsonEncode({
           'username': username,
           'password': password,
@@ -92,7 +93,7 @@ class AuthService {
         prefs.setString('token', '');
       }
       var tokenRes = await http.post(
-        Uri.parse('http://10.0.2.2:8080/auth/token'),
+        Uri.parse('${HOST}/auth/token'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token',
@@ -106,7 +107,8 @@ class AuthService {
         userProvider.setHome(token!);
         return;
       } else {
-        prefs.setString('token', '');
+        if (tokenRes.statusCode == 401) prefs.setString('token', '');
+        userProvider.loadFailed();
       }
       userProvider.setLogin();
     } catch (e) {

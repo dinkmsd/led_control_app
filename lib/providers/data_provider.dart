@@ -22,11 +22,24 @@ class DataProvider extends ChangeNotifier {
 
     _groups[groupIndex].leds[ledIndex] =
         _groups[groupIndex].leds[ledIndex].copyWith(
-              temp: data['temp'],
-              humi: data['humi'],
-              brightness: data['brightness'],
-              incli: data['incli'],
+              temp: data['temp'] != null
+                  ? data['temp']
+                  : _groups[groupIndex].leds[ledIndex].temp,
+              humi: data['humi'] != null
+                  ? data['humi']
+                  : _groups[groupIndex].leds[ledIndex].humi,
+              brightness: data['brightness'] != null
+                  ? data['brightness']
+                  : _groups[groupIndex].leds[ledIndex].brightness,
+              incli: data['incli'] != null
+                  ? data['incli']
+                  : _groups[groupIndex].leds[ledIndex].incli,
             );
+    notifyListeners();
+  }
+
+  void updateStatus(int groupIndex, bool status) {
+    _groups[groupIndex] = _groups[groupIndex].copyWith(status: status);
     notifyListeners();
   }
 

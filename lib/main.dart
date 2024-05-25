@@ -54,6 +54,22 @@ class _MyAppState extends State<MyApp> {
             );
           }
 
+          if (currentState.state == AppAuthState.failed) {
+            return Center(
+              child: Column(
+                children: [
+                  Text('Network Failed!!!'),
+                  ElevatedButton(
+                      onPressed: () {
+                        currentState.loading();
+                        authService.getUserData(context);
+                      },
+                      child: Text('Reload'))
+                ],
+              ),
+            );
+          }
+
           return const Center(
             child: CircularProgressIndicator(),
           );
