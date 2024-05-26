@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:led_control_app/models/schedule.dart';
+import 'package:led_control_app/providers/group_setting_provider.dart';
 import 'package:led_control_app/server/group_setting_service.dart';
-import 'package:led_control_app/utils/app_color.dart';
-import 'package:led_control_app/utils/custom_switch.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class GroupScheduleWidget extends StatefulWidget {
-  Schedule item;
-  GroupScheduleWidget({super.key, required this.item});
+  int scheIdx;
+  GroupScheduleWidget({super.key, required this.scheIdx});
 
   @override
   State<GroupScheduleWidget> createState() => _GroupScheduleWidgetState();
@@ -16,13 +15,14 @@ class GroupScheduleWidget extends StatefulWidget {
 
 class _GroupScheduleWidgetState extends State<GroupScheduleWidget> {
   late DateTime dateTimeFormat;
-
-  void login() {}
+  late GroupSettingProvider groupSettingProvider;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    groupSettingProvider =
+        Provider.of<GroupSettingProvider>(context, listen: false);
   }
 
   DateTime covertDateString(String dateString) {
@@ -45,14 +45,15 @@ class _GroupScheduleWidgetState extends State<GroupScheduleWidget> {
   GroupSettingService scheduleService = GroupSettingService();
   @override
   Widget build(BuildContext context) {
-    var _dateFormat = this.covertDateString(widget.item.time);
+    var _dateFormat = this
+        .covertDateString(groupSettingProvider.schedules[widget.scheIdx].time);
     String hhmm = DateFormat('hh:mm ').format(_dateFormat);
     String aa = DateFormat('aa').format(_dateFormat);
     return Container(
       margin: const EdgeInsets.all(10.0),
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32),
       decoration: BoxDecoration(
-        color: AppColors.buttonCustomColor,
+        color: Color.fromARGB(255, 40, 119, 47),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -76,19 +77,21 @@ class _GroupScheduleWidgetState extends State<GroupScheduleWidget> {
                   ],
                 ),
               ),
-              CustomSwitch(
-                value: widget.item.status,
+              Switch(
+                activeTrackColor: Colors.blue,
+                value: groupSettingProvider.schedules[widget.scheIdx].status,
                 onChanged: (value) {
                   scheduleService.updateSchedule(
-                      context, widget.item.id, value);
-                  setState(() {
-                    widget.item = widget.item.copyWith(status: value);
-                  });
+                      context, widget.scheIdx, value);
+                  // setState(() {
+                  //   widget.item = widget.item.copyWith(status: value);
+                  // });
                 },
-              ),
+              )
             ],
           ),
-          Text("Brightness: ${widget.item.value} %",
+          Text(
+              "Brightness: ${groupSettingProvider.schedules[widget.scheIdx].value} %",
               style: const TextStyle(color: Colors.white)),
         ],
       ),

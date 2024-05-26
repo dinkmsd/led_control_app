@@ -20,6 +20,7 @@ class GroupSettingService {
         'Authorization': 'Bearer $token',
       },
     );
+    print(res.body);
     if (res.statusCode == 200) {
       List<dynamic> body = json.decode(res.body)['data'];
       List<Schedule> schedules = body.map((e) => Schedule.fromJson(e)).toList();
@@ -82,15 +83,16 @@ class GroupSettingService {
     }
   }
 
-  void updateSchedule(BuildContext context, String scheID, bool status) async {
+  void updateSchedule(BuildContext context, int scheIdx, bool status) async {
     var scheduleProvider =
         Provider.of<GroupSettingProvider>(context, listen: false);
     final token = scheduleProvider.token;
 
     var ledID = scheduleProvider.id;
+    var scheId = scheduleProvider.schedules[scheIdx].id;
     final msg = jsonEncode({
       'groupId': ledID,
-      'scheId': scheID,
+      'scheId': scheId,
       'status': status,
     });
     http.Response res = await http.patch(Uri.parse('${HOST}/group/schedule'),
@@ -99,13 +101,10 @@ class GroupSettingService {
           'Authorization': 'Bearer $token'
         },
         body: msg);
-    print(res.body.toString());
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
-      var schedule = scheduleProvider.schedules
-          .firstWhere((element) => element.id == scheID);
-      schedule = schedule.copyWith(status: body['status']);
-      scheduleProvider.loadSuccessed(scheduleProvider.schedules);
+      bool status = body['status'];
+      scheduleProvider.updateStatus(scheIdx, status);
     }
   }
 

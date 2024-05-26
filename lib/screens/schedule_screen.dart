@@ -39,111 +39,122 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           var scheduleProvider =
               Provider.of<ScheduleProvider>(context, listen: false);
           showModalBottomSheet(
+            isScrollControlled: true,
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
             context: context,
             builder: (BuildContext context) {
-              return ChangeNotifierProvider.value(
-                value: scheduleProvider,
-                child: Consumer<ScheduleProvider>(
-                    builder: (context, state, child) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(15))),
-                        padding: contentPadding,
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('Cancel')),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.ios_share)),
-                              ],
-                            ),
-                            const Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Add Schedule',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
+              return Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: ChangeNotifierProvider.value(
+                  value: scheduleProvider,
+                  child: Consumer<ScheduleProvider>(
+                      builder: (context, state, child) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(15))),
+                          padding: contentPadding,
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('Cancel')),
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.ios_share)),
+                                ],
                               ),
-                            ),
-                            const SizedBox(
-                              height: 9,
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                var selectedTime = await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.now(),
-                                    ) ??
-                                    TimeOfDay.now();
-                                var selectedDateTime = DateTime(2024, 1, 1,
-                                    selectedTime.hour, selectedTime.minute);
+                              const Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'Add Schedule',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 9,
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  var selectedTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      ) ??
+                                      TimeOfDay.now();
+                                  var selectedDateTime = DateTime(2024, 1, 1,
+                                      selectedTime.hour, selectedTime.minute);
 
-                                // ignore: use_build_context_synchronously
-                                scheduleService.setTimer(
-                                    context,
-                                    DateFormat('hh:mm aa')
-                                        .format(selectedDateTime));
-                              },
-                              child: Text(
-                                scheduleService.getTimer(context),
-                                style: const TextStyle(fontSize: 32),
+                                  // ignore: use_build_context_synchronously
+                                  scheduleService.setTimer(
+                                      context,
+                                      DateFormat('hh:mm aa')
+                                          .format(selectedDateTime));
+                                },
+                                child: Text(
+                                  scheduleService.getTimer(context),
+                                  style: const TextStyle(fontSize: 32),
+                                ),
                               ),
-                            ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: CustomTextField(
-                                controller: valueController,
-                                hintText: 'Enter value',
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: CustomTextField(
+                                  controller: valueController,
+                                  hintText: 'Enter value',
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: SizedBox(
-                          height: 45,
-                          width: MediaQuery.of(context).size.width * 3 / 4,
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              // Add schedule handler
-                              scheduleService.setSchedule(
-                                  context, valueController.text);
-                            },
-                            label: const Text(
-                              "Add",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            icon: const Icon(
-                              Icons.add_box_outlined,
-                              color: Colors.white,
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF007AFF),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15))),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                }),
+                        SizedBox(
+                          height: 90,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: SizedBox(
+                            height: 45,
+                            width: MediaQuery.of(context).size.width * 3 / 4,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                // Add schedule handler
+                                scheduleService.setSchedule(
+                                    context, valueController.text);
+                              },
+                              label: const Text(
+                                "Add",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              icon: const Icon(
+                                Icons.add_box_outlined,
+                                color: Colors.white,
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF007AFF),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15))),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+                ),
               );
             },
           );
@@ -176,7 +187,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 },
                 // Show a red background as the item is swiped away.
                 background: Container(color: Colors.red),
-                child: ScheduleWidget(item: item),
+                child: ScheduleWidget(scheIdx: index),
               );
             },
             // itemBuilder: (context, index) =>

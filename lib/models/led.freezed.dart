@@ -20,6 +20,7 @@ Led _$LedFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Led {
+  String get group => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   bool get status => throw _privateConstructorUsedError;
@@ -48,7 +49,8 @@ abstract class $LedCopyWith<$Res> {
       _$LedCopyWithImpl<$Res, Led>;
   @useResult
   $Res call(
-      {String id,
+      {String group,
+      String id,
       String name,
       bool status,
       double lat,
@@ -78,6 +80,7 @@ class _$LedCopyWithImpl<$Res, $Val extends Led> implements $LedCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? group = null,
     Object? id = null,
     Object? name = null,
     Object? status = null,
@@ -96,6 +99,10 @@ class _$LedCopyWithImpl<$Res, $Val extends Led> implements $LedCopyWith<$Res> {
     Object? schedules = null,
   }) {
     return _then(_value.copyWith(
+      group: null == group
+          ? _value.group
+          : group // ignore: cast_nullable_to_non_nullable
+              as String,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -171,7 +178,8 @@ abstract class _$$LedImplCopyWith<$Res> implements $LedCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id,
+      {String group,
+      String id,
       String name,
       bool status,
       double lat,
@@ -198,6 +206,7 @@ class __$$LedImplCopyWithImpl<$Res> extends _$LedCopyWithImpl<$Res, _$LedImpl>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? group = null,
     Object? id = null,
     Object? name = null,
     Object? status = null,
@@ -216,6 +225,10 @@ class __$$LedImplCopyWithImpl<$Res> extends _$LedCopyWithImpl<$Res, _$LedImpl>
     Object? schedules = null,
   }) {
     return _then(_$LedImpl(
+      group: null == group
+          ? _value.group
+          : group // ignore: cast_nullable_to_non_nullable
+              as String,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -288,7 +301,8 @@ class __$$LedImplCopyWithImpl<$Res> extends _$LedCopyWithImpl<$Res, _$LedImpl>
 @JsonSerializable()
 class _$LedImpl implements _Led {
   _$LedImpl(
-      {required this.id,
+      {required this.group,
+      required this.id,
       required this.name,
       required this.status,
       required this.lat,
@@ -308,6 +322,8 @@ class _$LedImpl implements _Led {
   factory _$LedImpl.fromJson(Map<String, dynamic> json) =>
       _$$LedImplFromJson(json);
 
+  @override
+  final String group;
   @override
   final String id;
   @override
@@ -345,7 +361,7 @@ class _$LedImpl implements _Led {
 
   @override
   String toString() {
-    return 'Led(id: $id, name: $name, status: $status, lat: $lat, lon: $lon, temp: $temp, humi: $humi, brightness: $brightness, incli: $incli, x: $x, y: $y, z: $z, rsrp: $rsrp, cellID: $cellID, histories: $histories, schedules: $schedules)';
+    return 'Led(group: $group, id: $id, name: $name, status: $status, lat: $lat, lon: $lon, temp: $temp, humi: $humi, brightness: $brightness, incli: $incli, x: $x, y: $y, z: $z, rsrp: $rsrp, cellID: $cellID, histories: $histories, schedules: $schedules)';
   }
 
   @override
@@ -353,6 +369,7 @@ class _$LedImpl implements _Led {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LedImpl &&
+            (identical(other.group, group) || other.group == group) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.status, status) || other.status == status) &&
@@ -376,6 +393,7 @@ class _$LedImpl implements _Led {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      group,
       id,
       name,
       status,
@@ -409,7 +427,8 @@ class _$LedImpl implements _Led {
 
 abstract class _Led implements Led {
   factory _Led(
-      {required final String id,
+      {required final String group,
+      required final String id,
       required final String name,
       required final bool status,
       required final double lat,
@@ -428,6 +447,8 @@ abstract class _Led implements Led {
 
   factory _Led.fromJson(Map<String, dynamic> json) = _$LedImpl.fromJson;
 
+  @override
+  String get group;
   @override
   String get id;
   @override

@@ -10,6 +10,11 @@ class ScheduleProvider extends ChangeNotifier {
   String timeString = '';
   ScheduleProvider({required this.id, required this.token});
 
+  void updateStatus(int scheIdx, bool status) {
+    schedules[scheIdx] = schedules[scheIdx].copyWith(status: status);
+    notifyListeners();
+  }
+
   void loadSuccessed(List<Schedule> schedules) {
     this.schedules = schedules;
     state = LoadingState.success;

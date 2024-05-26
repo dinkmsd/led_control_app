@@ -16,6 +16,11 @@ class GroupSettingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateStatus(int scheIdx, bool status) {
+    schedules[scheIdx] = schedules[scheIdx].copyWith(status: status);
+    notifyListeners();
+  }
+
   void loadFailed() {
     schedules = [];
     state = LoadingState.fail;

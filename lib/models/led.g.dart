@@ -7,6 +7,7 @@ part of 'led.dart';
 // **************************************************************************
 
 _$LedImpl _$$LedImplFromJson(Map<String, dynamic> json) => _$LedImpl(
+      group: json['group'] as String,
       id: json['id'] as String,
       name: json['name'] as String,
       status: json['status'] as bool,
@@ -32,6 +33,7 @@ _$LedImpl _$$LedImplFromJson(Map<String, dynamic> json) => _$LedImpl(
     );
 
 Map<String, dynamic> _$$LedImplToJson(_$LedImpl instance) => <String, dynamic>{
+      'group': instance.group,
       'id': instance.id,
       'name': instance.name,
       'status': instance.status,

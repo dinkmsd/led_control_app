@@ -80,15 +80,15 @@ class ScheduleService {
     }
   }
 
-  void updateSchedule(BuildContext context, String scheID, bool status) async {
+  void updateSchedule(BuildContext context, int scheIdx, bool status) async {
     var scheduleProvider =
         Provider.of<ScheduleProvider>(context, listen: false);
     final token = scheduleProvider.token;
-
+    var scheId = scheduleProvider.schedules[scheIdx].id;
     var ledID = scheduleProvider.id;
     final msg = jsonEncode({
       'ledId': ledID,
-      'scheduleId': scheID,
+      'scheduleId': scheId,
       'status': status,
     });
     http.Response res = await http.patch(Uri.parse('${HOST}/led/schedule'),
@@ -99,10 +99,9 @@ class ScheduleService {
         body: msg);
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
-      var schedule = scheduleProvider.schedules
-          .firstWhere((element) => element.id == scheID);
-      schedule = schedule.copyWith(status: body['status']);
-      scheduleProvider.loadSuccessed(scheduleProvider.schedules);
+
+      bool status = body['status'];
+      scheduleProvider.updateStatus(scheIdx, status);
     }
   }
 

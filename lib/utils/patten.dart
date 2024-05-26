@@ -23,6 +23,7 @@ enum MQTTConnectionState { connected, disconnected, connecting }
 enum AppConnectionState { connected, disconnected, connecting }
 
 Led tmp = Led(
+    group: "6566aec06d2075526cfe1331",
     id: '6566aec06d2075526cfe1331',
     name: "LED 3",
     lat: 10.876264682056627,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:led_control_app/models/led.dart';
 import 'package:led_control_app/providers/data_provider.dart';
+import 'package:led_control_app/screens/detail_screen.dart';
 import 'package:led_control_app/utils/app_color.dart';
 import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
@@ -79,21 +79,27 @@ class _MapScreenState extends State<MapScreen> {
         margin: contentPadding,
         padding: contentPadding,
         child: Consumer<DataProvider>(builder: (context, state, child) {
-          var items = state.groups[0].leds;
           markers = {};
-          for (var item in items) {
-            final position = LatLng(item.lat, item.lon);
-            markers.add(Marker(
-              onTap: () {
-                final tmpPosition = LatLng(item.lat - 0.0002, item.lon);
-                currentPosition = tmpPosition;
-                showModalSheet(item);
-              },
-              icon: iconImage,
-              position: position,
-              markerId: MarkerId(position.toString()),
-            ));
+
+          for (int i = 0; i < state.groups.length; i++) {
+            for (int j = 0; j < state.groups[i].leds.length; j++) {
+              final position = LatLng(
+                  state.groups[i].leds[j].lat, state.groups[i].leds[j].lon);
+              markers.add(Marker(
+                onTap: () {
+                  final tmpPosition = LatLng(
+                      state.groups[i].leds[j].lat - 0.0002,
+                      state.groups[i].leds[j].lon);
+                  currentPosition = tmpPosition;
+                  showModalSheet(i, j);
+                },
+                icon: iconImage,
+                position: position,
+                markerId: MarkerId(position.toString()),
+              ));
+            }
           }
+
           return GoogleMap(
             trafficEnabled: true,
             initialCameraPosition: CameraPosition(
@@ -112,106 +118,121 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  void showModalSheet(Led item) {
+  void showModalSheet(int groupIdx, int ledIdx) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
         context: context,
         builder: (context) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(15))),
-                padding: contentPadding,
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
-                            onPressed: () {}, child: const Text('Cancel')),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.ios_share)),
-                      ],
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        item.name,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
+          var dataProvider = Provider.of<DataProvider>(context, listen: false);
+          var item = dataProvider.groups[groupIdx].leds[ledIdx];
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(15))),
+                  padding: contentPadding,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancel')),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.ios_share)),
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 9,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: detailInfoWidget(
-                                Icons.device_thermostat,
-                                '${item.temp.toString()} °C',
-                                AppColors.gradientRed)),
-                        Expanded(
-                            child: detailInfoWidget(
-                                Icons.water_drop,
-                                '${item.humi.toString()} %',
-                                AppColors.gradientBlue))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: detailInfoWidget(
-                                Icons.text_rotation_angledown,
-                                item.incli.toString(),
-                                AppColors.gradientGreen)),
-                        Expanded(
-                            child: detailInfoWidget(Icons.network_check,
-                                item.rsrp.toString(), AppColors.gradientPurple))
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: SizedBox(
-                  height: 45,
-                  width: MediaQuery.of(context).size.width * 3 / 4,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => DetailScreen(
-                      //       led: item,
-                      //     ),
-                      //   ),
-                      // );
-                    },
-                    label: const Text(
-                      "View Detail",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    icon: const Icon(
-                      Icons.menu_open_outlined,
-                      color: Colors.white,
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF007AFF),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15))),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          item.name,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 9,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: detailInfoWidget(
+                                  Icons.device_thermostat,
+                                  '${item.temp.toString()} °C',
+                                  AppColors.gradientRed)),
+                          Expanded(
+                              child: detailInfoWidget(
+                                  Icons.water_drop,
+                                  '${item.humi.toString()} %',
+                                  AppColors.gradientBlue))
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: detailInfoWidget(
+                                  Icons.text_rotation_angledown,
+                                  item.incli.toString(),
+                                  AppColors.gradientGreen)),
+                          Expanded(
+                              child: detailInfoWidget(
+                                  Icons.network_check,
+                                  item.rsrp.toString(),
+                                  AppColors.gradientPurple))
+                        ],
+                      )
+                    ],
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: SizedBox(
+                    height: 45,
+                    width: MediaQuery.of(context).size.width * 3 / 4,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChangeNotifierProvider.value(
+                              value: dataProvider,
+                              child: DetailScreen(
+                                groupIdx: groupIdx,
+                                ledIdx: ledIdx,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      label: const Text(
+                        "View Detail",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      icon: const Icon(
+                        Icons.menu_open_outlined,
+                        color: Colors.white,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF007AFF),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15))),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         });
   }

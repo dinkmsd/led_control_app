@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:led_control_app/models/schedule.dart';
+import 'package:led_control_app/providers/schedule_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
 import 'package:led_control_app/server/schedule_service.dart';
 import 'package:led_control_app/utils/app_color.dart';
-import 'package:led_control_app/utils/custom_switch.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class ScheduleWidget extends StatefulWidget {
-  Schedule item;
-  ScheduleWidget({super.key, required this.item});
+  int scheIdx;
+  ScheduleWidget({super.key, required this.scheIdx});
 
   @override
   State<ScheduleWidget> createState() => _ScheduleWidgetState();
@@ -19,14 +18,14 @@ class ScheduleWidget extends StatefulWidget {
 class _ScheduleWidgetState extends State<ScheduleWidget> {
   late UserProvider userProvider;
   late DateTime dateTimeFormat;
-
-  void login() {}
+  late ScheduleProvider scheduleProvider;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     userProvider = Provider.of<UserProvider>(context, listen: false);
+    scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
   }
 
   DateTime covertDateString(String dateString) {
@@ -46,12 +45,11 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
     return DateTime.now();
   }
 
-  void functionDemo() {}
-
   ScheduleService scheduleService = ScheduleService();
   @override
   Widget build(BuildContext context) {
-    var _dateFormat = this.covertDateString(widget.item.time);
+    var _dateFormat =
+        this.covertDateString(scheduleProvider.schedules[widget.scheIdx].time);
     String hhmm = DateFormat('hh:mm ').format(_dateFormat);
     String aa = DateFormat('aa').format(_dateFormat);
     return Container(
@@ -82,19 +80,18 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                   ],
                 ),
               ),
-              CustomSwitch(
-                value: widget.item.status,
+              Switch(
+                activeTrackColor: Colors.blue,
+                value: scheduleProvider.schedules[widget.scheIdx].status,
                 onChanged: (value) {
                   scheduleService.updateSchedule(
-                      context, widget.item.id, value);
-                  setState(() {
-                    widget.item = widget.item.copyWith(status: value);
-                  });
+                      context, widget.scheIdx, value);
                 },
-              ),
+              )
             ],
           ),
-          Text("Brightness: ${widget.item.value} %",
+          Text(
+              "Brightness: ${scheduleProvider.schedules[widget.scheIdx].value} %",
               style: const TextStyle(color: Colors.white)),
         ],
       ),
