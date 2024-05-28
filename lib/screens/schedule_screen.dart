@@ -135,6 +135,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                 // Add schedule handler
                                 scheduleService.setSchedule(
                                     context, valueController.text);
+                                Navigator.of(context).pop();
                               },
                               label: const Text(
                                 "Add",

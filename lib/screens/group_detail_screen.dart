@@ -185,7 +185,11 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                                   status: value,
                                   context: context);
                             },
+                            onDelete: (groupId) {
+                              dataService.deleteGroup(groupId, context);
+                            },
                             status: dataProvider.groups[widget.groupIdx].status,
+                            id: dataProvider.groups[widget.groupIdx].id,
                           )),
                     ),
                   );

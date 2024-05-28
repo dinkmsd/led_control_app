@@ -103,12 +103,28 @@ class DataService {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({"nameGroup": name}));
-    print(res.body);
     if (res.statusCode == 200) {
       var body = json.decode(res.body);
       print(body);
       Group item = Group.fromJson(body);
       dataProvider.addGroup(item);
+    } else {
+      dataProvider.loadFailed();
+    }
+  }
+
+  void deleteGroup(String groupId, BuildContext context) async {
+    var dataProvider = Provider.of<DataProvider>(context, listen: false);
+    final token = dataProvider.token;
+    http.Response res =
+        await http.delete(Uri.parse('${HOST}/group/delete-group'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token'
+            },
+            body: jsonEncode({"groupId": groupId}));
+    if (res.statusCode == 200) {
+      dataProvider.deleteGroup(groupId);
     } else {
       dataProvider.loadFailed();
     }

@@ -85,4 +85,9 @@ class DataProvider extends ChangeNotifier {
     state = LoadingState.wating;
     notifyListeners();
   }
+
+  void deleteGroup(String groupId) {
+    _groups.removeWhere((element) => element.id == groupId);
+    notifyListeners();
+  }
 }

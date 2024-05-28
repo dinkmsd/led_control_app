@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:led_control_app/components/group_schedule_widget.dart';
 import 'package:led_control_app/providers/group_setting_provider.dart';
@@ -9,9 +10,16 @@ import 'package:provider/provider.dart';
 
 class GroupSettingScreen extends StatefulWidget {
   final Function(dynamic) onChangeStatus;
+  final Function(dynamic) onDelete;
+
   final status;
+  final id;
   GroupSettingScreen(
-      {super.key, required this.onChangeStatus, required this.status});
+      {super.key,
+      required this.onChangeStatus,
+      required this.onDelete,
+      required this.status,
+      required this.id});
 
   @override
   State<GroupSettingScreen> createState() => _GroupSettingScreenState();
@@ -179,7 +187,7 @@ class _GroupSettingScreenState extends State<GroupSettingScreen> {
                     Switch(
                       // This bool value toggles the switch.
                       value: currentStatus,
-                      activeColor: Colors.green,
+                      activeTrackColor: Colors.green,
                       onChanged: (value) {
                         widget.onChangeStatus(value);
                         setState(() {
@@ -192,10 +200,87 @@ class _GroupSettingScreenState extends State<GroupSettingScreen> {
               ),
               Padding(
                 padding: contentPadding,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text("Delete this group"),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Group token',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    OutlinedButton(
+                      // This bool value toggles the switch.
+                      onPressed: () {
+                        Clipboard.setData(new ClipboardData(text: widget.id))
+                            .then((_) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Copied token to your clipboard !')));
+                        });
+                      },
+                      child: const Text("Copy"),
+                    )
+                  ],
                 ),
+              ),
+              Padding(
+                padding: contentPadding,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final result = await showDialog<bool>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Alert!'),
+                          content: const Text(
+                            'Are you sure want to delete this group?',
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                textStyle:
+                                    Theme.of(context).textTheme.labelLarge,
+                              ),
+                              child: const Text('Cancel'),
+                              onPressed: () {
+                                return Navigator.pop(context, false);
+                              },
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                textStyle:
+                                    Theme.of(context).textTheme.labelLarge,
+                              ),
+                              child: const Text('Delete'),
+                              onPressed: () {
+                                return Navigator.pop(context, true);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                    if (result == null || !result) {
+                      return;
+                    }
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    widget.onDelete(widget.id);
+                  },
+                  child: Text(
+                    "Delete this group",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                ),
+              ),
+              Padding(
+                padding: contentPadding,
+                child: SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      'Schedule',
+                      style: TextStyle(fontSize: 18),
+                    )),
               ),
               Expanded(
                 child: ListView.builder(
