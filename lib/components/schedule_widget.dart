@@ -37,6 +37,9 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
       case 'PM':
         {
           var hh = int.parse(hhmm[0]);
+          if (hh == 12) {
+            return DateTime(2024, 1, 1, int.parse(hhmm[0]), int.parse(hhmm[1]));
+          }
           hh += 12;
           if (hh == 24) hh = 0;
           return DateTime(2024, 1, 1, hh, int.parse(hhmm[1]));
