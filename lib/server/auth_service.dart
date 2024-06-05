@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:led_control_app/providers/user_provider.dart';
@@ -67,6 +68,20 @@ class AuthService {
         String token = body['token'];
         await prefs.setString('token', token);
         userProvider.setHome(token);
+        final _firebaseMessaging = FirebaseMessaging.instance;
+        _firebaseMessaging.requestPermission();
+        FirebaseMessaging.instance.getToken().then((value) async {
+          String? fcmToken = value;
+          print(fcmToken);
+          var res = await http.patch(
+              Uri.parse('${HOST}/users/update-fcm-token/${body['user']['id']}'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': 'Bearer $token'
+              },
+              body: jsonEncode({"oldToken": "", "newToken": fcmToken}));
+          print(res.body);
+        });
       } else {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)

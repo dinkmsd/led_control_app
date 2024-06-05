@@ -26,6 +26,7 @@ mixin _$Led {
   bool get status => throw _privateConstructorUsedError;
   double get lat => throw _privateConstructorUsedError;
   double get lon => throw _privateConstructorUsedError;
+  bool get autoMode => throw _privateConstructorUsedError;
   int? get temp => throw _privateConstructorUsedError;
   int? get humi => throw _privateConstructorUsedError;
   int? get brightness => throw _privateConstructorUsedError;
@@ -55,6 +56,7 @@ abstract class $LedCopyWith<$Res> {
       bool status,
       double lat,
       double lon,
+      bool autoMode,
       int? temp,
       int? humi,
       int? brightness,
@@ -86,6 +88,7 @@ class _$LedCopyWithImpl<$Res, $Val extends Led> implements $LedCopyWith<$Res> {
     Object? status = null,
     Object? lat = null,
     Object? lon = null,
+    Object? autoMode = null,
     Object? temp = freezed,
     Object? humi = freezed,
     Object? brightness = freezed,
@@ -123,6 +126,10 @@ class _$LedCopyWithImpl<$Res, $Val extends Led> implements $LedCopyWith<$Res> {
           ? _value.lon
           : lon // ignore: cast_nullable_to_non_nullable
               as double,
+      autoMode: null == autoMode
+          ? _value.autoMode
+          : autoMode // ignore: cast_nullable_to_non_nullable
+              as bool,
       temp: freezed == temp
           ? _value.temp
           : temp // ignore: cast_nullable_to_non_nullable
@@ -184,6 +191,7 @@ abstract class _$$LedImplCopyWith<$Res> implements $LedCopyWith<$Res> {
       bool status,
       double lat,
       double lon,
+      bool autoMode,
       int? temp,
       int? humi,
       int? brightness,
@@ -212,6 +220,7 @@ class __$$LedImplCopyWithImpl<$Res> extends _$LedCopyWithImpl<$Res, _$LedImpl>
     Object? status = null,
     Object? lat = null,
     Object? lon = null,
+    Object? autoMode = null,
     Object? temp = freezed,
     Object? humi = freezed,
     Object? brightness = freezed,
@@ -249,6 +258,10 @@ class __$$LedImplCopyWithImpl<$Res> extends _$LedCopyWithImpl<$Res, _$LedImpl>
           ? _value.lon
           : lon // ignore: cast_nullable_to_non_nullable
               as double,
+      autoMode: null == autoMode
+          ? _value.autoMode
+          : autoMode // ignore: cast_nullable_to_non_nullable
+              as bool,
       temp: freezed == temp
           ? _value.temp
           : temp // ignore: cast_nullable_to_non_nullable
@@ -307,6 +320,7 @@ class _$LedImpl implements _Led {
       required this.status,
       required this.lat,
       required this.lon,
+      required this.autoMode,
       this.temp,
       this.humi,
       this.brightness,
@@ -335,6 +349,8 @@ class _$LedImpl implements _Led {
   @override
   final double lon;
   @override
+  final bool autoMode;
+  @override
   final int? temp;
   @override
   final int? humi;
@@ -361,7 +377,7 @@ class _$LedImpl implements _Led {
 
   @override
   String toString() {
-    return 'Led(group: $group, id: $id, name: $name, status: $status, lat: $lat, lon: $lon, temp: $temp, humi: $humi, brightness: $brightness, incli: $incli, x: $x, y: $y, z: $z, rsrp: $rsrp, cellID: $cellID, histories: $histories, schedules: $schedules)';
+    return 'Led(group: $group, id: $id, name: $name, status: $status, lat: $lat, lon: $lon, autoMode: $autoMode, temp: $temp, humi: $humi, brightness: $brightness, incli: $incli, x: $x, y: $y, z: $z, rsrp: $rsrp, cellID: $cellID, histories: $histories, schedules: $schedules)';
   }
 
   @override
@@ -375,6 +391,8 @@ class _$LedImpl implements _Led {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.lat, lat) || other.lat == lat) &&
             (identical(other.lon, lon) || other.lon == lon) &&
+            (identical(other.autoMode, autoMode) ||
+                other.autoMode == autoMode) &&
             (identical(other.temp, temp) || other.temp == temp) &&
             (identical(other.humi, humi) || other.humi == humi) &&
             (identical(other.brightness, brightness) ||
@@ -399,6 +417,7 @@ class _$LedImpl implements _Led {
       status,
       lat,
       lon,
+      autoMode,
       temp,
       humi,
       brightness,
@@ -433,6 +452,7 @@ abstract class _Led implements Led {
       required final bool status,
       required final double lat,
       required final double lon,
+      required final bool autoMode,
       final int? temp,
       final int? humi,
       final int? brightness,
@@ -459,6 +479,8 @@ abstract class _Led implements Led {
   double get lat;
   @override
   double get lon;
+  @override
+  bool get autoMode;
   @override
   int? get temp;
   @override

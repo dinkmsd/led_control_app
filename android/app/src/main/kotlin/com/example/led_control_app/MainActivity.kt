@@ -1,4 +1,4 @@
-package com.example.led_control_app
+package com.example.push_notification
 
 import io.flutter.embedding.android.FlutterActivity
 

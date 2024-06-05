@@ -40,6 +40,8 @@ class ScheduleService {
       'value': int.parse(value),
     });
 
+    print(msg);
+
     http.Response res = await http.post(Uri.parse('${HOST}/led/schedule'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

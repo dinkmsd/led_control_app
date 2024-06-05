@@ -55,6 +55,28 @@ class DataService {
     }
   }
 
+  void updateAutoMode(
+      {required BuildContext context,
+      required bool status,
+      required int groupIdx,
+      required int ledIdx}) async {
+    var dataProvider = Provider.of<DataProvider>(context, listen: false);
+    final token = dataProvider.token;
+    final ledId = dataProvider.groups[groupIdx].leds[ledIdx].id;
+    http.Response res = await http.patch(Uri.parse('${HOST}/led/update-mode'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({"ledId": ledId, "status": status}));
+    print(res.body);
+    if (res.statusCode == 200) {
+      dataProvider.updateAutoMode(groupIdx, ledIdx, status);
+    } else {
+      dataProvider.loadFailed();
+    }
+  }
+
   void addNewLed(BuildContext context, String name, double lat, double lon,
       String groupId) async {
     var dataProvider = Provider.of<DataProvider>(context, listen: false);

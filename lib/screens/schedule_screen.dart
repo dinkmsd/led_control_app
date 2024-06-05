@@ -9,13 +9,18 @@ import 'package:led_control_app/utils/patten.dart';
 import 'package:provider/provider.dart';
 
 class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({super.key});
+  final Function(dynamic) onChangeStatus;
+  final autoMode;
+  const ScheduleScreen(
+      {super.key, required this.autoMode, required this.onChangeStatus});
 
   @override
   State<ScheduleScreen> createState() => _ScheduleScreenState();
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
+  late bool currentAutoMode;
+
   ScheduleService scheduleService = ScheduleService();
   late UserProvider userProvider;
 
@@ -23,6 +28,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   void initState() {
     userProvider = Provider.of<UserProvider>(context, listen: false);
     scheduleService.getSchedule(context);
+    currentAutoMode = widget.autoMode;
+
     super.initState();
   }
 
@@ -165,34 +172,63 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       body: Consumer<ScheduleProvider>(builder: (context, state, child) {
         if (state.state == LoadingState.success) {
           var items = state.schedules;
-          return ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              final item = items[index];
-              return Dismissible(
-                // Each Dismissible must contain a Key. Keys allow Flutter to
-                // uniquely identify widgets.
-                key: Key(item.id),
-                // Provide a function that tells the app
-                // what to do after an item has been swiped away.
-                onDismissed: (direction) {
-                  // Remove the item from the data source
-                  scheduleService.deleteSchedule(context, item.id);
-                  setState(() {
-                    items.removeAt(index);
-                  });
+          return Column(
+            children: [
+              Padding(
+                padding: contentPadding,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Auto Mode',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Switch(
+                      // This bool value toggles the switch.
+                      value: currentAutoMode,
+                      activeTrackColor: Colors.green,
+                      onChanged: (value) {
+                        widget.onChangeStatus(value);
+                        setState(() {
+                          currentAutoMode = value;
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return Dismissible(
+                      // Each Dismissible must contain a Key. Keys allow Flutter to
+                      // uniquely identify widgets.
+                      key: Key(item.id),
+                      // Provide a function that tells the app
+                      // what to do after an item has been swiped away.
+                      onDismissed: (direction) {
+                        // Remove the item from the data source
+                        scheduleService.deleteSchedule(context, item.id);
+                        setState(() {
+                          items.removeAt(index);
+                        });
 
-                  // Then show a snackbar.
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('$item dismissed')));
-                },
-                // Show a red background as the item is swiped away.
-                background: Container(color: Colors.red),
-                child: ScheduleWidget(scheIdx: index),
-              );
-            },
-            // itemBuilder: (context, index) =>
-            //     scheduleItem(Schedule(time: DateTime(2024), value: 30)),
+                        // Then show a snackbar.
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('$item dismissed')));
+                      },
+                      // Show a red background as the item is swiped away.
+                      background: Container(color: Colors.red),
+                      child: ScheduleWidget(scheIdx: index),
+                    );
+                  },
+                  // itemBuilder: (context, index) =>
+                  //     scheduleItem(Schedule(time: DateTime(2024), value: 30)),
+                ),
+              ),
+            ],
           );
         }
         return const Center(

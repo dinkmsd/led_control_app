@@ -43,6 +43,12 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateAutoMode(int groupIdx, int ledIdx, bool status) {
+    _groups[groupIdx].leds[ledIdx] =
+        _groups[groupIdx].leds[ledIdx].copyWith(autoMode: status);
+    notifyListeners();
+  }
+
   void loadSuccessed(List<Group> groups) {
     _groups = groups;
     state = LoadingState.success;

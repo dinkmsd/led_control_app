@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:led_control_app/models/led.dart';
 import 'package:led_control_app/utils/app_color.dart';
 
 enum LoadingState { wating, success, fail }
@@ -22,18 +21,19 @@ enum MQTTConnectionState { connected, disconnected, connecting }
 
 enum AppConnectionState { connected, disconnected, connecting }
 
-Led tmp = Led(
-    group: "6566aec06d2075526cfe1331",
-    id: '6566aec06d2075526cfe1331',
-    name: "LED 3",
-    lat: 10.876264682056627,
-    lon: 106.8045361629442,
-    temp: 30,
-    humi: 70,
-    brightness: 30,
-    histories: [],
-    schedules: [],
-    status: true);
+// Led tmp = Led(
+//     autoMode: false,
+//     group: "6566aec06d2075526cfe1331",
+//     id: '6566aec06d2075526cfe1331',
+//     name: "LED 3",
+//     lat: 10.876264682056627,
+//     lon: 106.8045361629442,
+//     temp: 30,
+//     humi: 70,
+//     brightness: 30,
+//     histories: [],
+//     schedules: [],
+//     status: true);
 
 TextStyle inclinationStyle = const TextStyle(
     fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white);

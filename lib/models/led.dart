@@ -13,6 +13,7 @@ class Led with _$Led {
     required bool status,
     required double lat,
     required double lon,
+    required bool autoMode,
     int? temp,
     int? humi,
     int? brightness,

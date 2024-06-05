@@ -6,8 +6,13 @@ import 'package:led_control_app/screens/login_screen.dart';
 import 'package:led_control_app/screens/register_screen.dart';
 import 'package:led_control_app/server/auth_service.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(
     MultiProvider(
       providers: [
@@ -27,16 +32,23 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final AuthService authService = AuthService();
+  final _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
     super.initState();
+    _firebaseMessaging.requestPermission();
+    FirebaseMessaging.instance.getToken().then((value) {
+      String? token = value;
+      print(token);
+    });
     authService.getUserData(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: new ThemeData(scaffoldBackgroundColor: Color(0xFFF6F8FB)),
       home: Consumer<UserProvider>(
         builder: (context, currentState, child) {
           if (currentState.state == AppAuthState.login) {

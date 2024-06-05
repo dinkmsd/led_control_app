@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:led_control_app/controllers/web_socket_manager.dart';
 import 'package:led_control_app/providers/data_provider.dart';
+import 'package:led_control_app/providers/notification_provider.dart';
 import 'package:led_control_app/screens/group_screen.dart';
 import 'package:led_control_app/screens/map_screen.dart';
 import 'package:led_control_app/screens/notification_screen.dart';
@@ -98,7 +99,9 @@ class _NavigationExampleState extends State<NavigationExample> {
         const MapScreen(),
 
         /// Notification page
-        const NotificationScreen(),
+        ChangeNotifierProvider(
+            create: (_) => NotificationProvider(token: dataProvider.token),
+            child: const NotificationScreen()),
 
         // User page
         const UserScreen(),

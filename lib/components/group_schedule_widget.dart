@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:led_control_app/providers/group_setting_provider.dart';
 import 'package:led_control_app/server/group_setting_service.dart';
+import 'package:led_control_app/utils/app_color.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -53,7 +54,7 @@ class _GroupScheduleWidgetState extends State<GroupScheduleWidget> {
       margin: const EdgeInsets.all(10.0),
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 40, 119, 47),
+        color: AppColors.buttonCustomColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(

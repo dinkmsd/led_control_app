@@ -4,7 +4,7 @@ import 'package:led_control_app/components/slider_widget.dart';
 import 'package:led_control_app/providers/data_provider.dart';
 import 'package:led_control_app/providers/schedule_provider.dart';
 import 'package:led_control_app/providers/user_provider.dart';
-import 'package:led_control_app/screens/notification_screen.dart';
+import 'package:led_control_app/screens/analysis_screen.dart';
 import 'package:led_control_app/screens/schedule_screen.dart';
 import 'package:led_control_app/server/data_service.dart';
 import 'package:led_control_app/utils/app_color.dart';
@@ -49,7 +49,16 @@ class _DetailScreenState extends State<DetailScreen> {
                       builder: (context) => ChangeNotifierProvider(
                           create: (_) =>
                               ScheduleProvider(id: item.id, token: state.token),
-                          child: const ScheduleScreen()),
+                          child: ScheduleScreen(
+                            autoMode: item.autoMode,
+                            onChangeStatus: (value) {
+                              dataService.updateAutoMode(
+                                  groupIdx: widget.groupIdx,
+                                  ledIdx: widget.ledIdx,
+                                  status: value,
+                                  context: context);
+                            },
+                          )),
                     ),
                   );
                 },
@@ -163,7 +172,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         onPressed: () {
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
-                            return NotificationScreen();
+                            return AnalysisScreen();
                           }));
                         },
                         child: Text("Analysis")),
